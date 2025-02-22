@@ -12,3 +12,24 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+
+  data:
+    mongodb:
+      uri: mongodb://192.168.1.40:27017/CLMS_SERVICE  #ContractLabour  # ✅ MongoDB Connection
+
+    kafka:
+      bootstrap-servers: localhost:9092
+      consumer:
+        group-id: query-service
+        auto-offset-reset: earliest
+        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+        properties:
+          spring.json.value.default.type: "com.inops.query.model.KafkaEvent"
+          spring.json.trusted.packages: "*"
+
+camel:
+  component:
+    kafka:
+      brokers: localhost:9092

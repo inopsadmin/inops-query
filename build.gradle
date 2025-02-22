@@ -15,6 +15,13 @@ java {
 
 repositories {
 	mavenCentral()
+	maven {
+		url = uri("https://maven-central.storage.apis.com")
+		url 'https://packages.confluent.io/maven/'
+
+	}
+	maven { url "https://repo1.maven.org/maven2/" }
+	maven { url "https://repository.apache.org/content/repositories/releases/" }
 }
 
 ext {
@@ -24,11 +31,29 @@ ext {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+	// Service Discovery (Netflix Eureka)
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+	// Apache Camel with Kafka & Reactive Streams
+	implementation 'org.apache.camel.springboot:camel-spring-boot-starter:3.20.2'
+	implementation 'org.apache.camel.springboot:camel-kafka-starter:3.20.2'
+	implementation 'org.apache.camel.springboot:camel-reactive-streams-starter:3.20.2'
+
+	// Kafka Client
 	implementation 'org.springframework.kafka:spring-kafka'
+	implementation 'org.apache.kafka:kafka-clients'
+
+	// JAXB for XML Processing (if required)
+	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
+	implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.3'
+
+	// Lombok (for cleaner code)
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+	// Testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'

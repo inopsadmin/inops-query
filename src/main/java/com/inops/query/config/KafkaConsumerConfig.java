@@ -57,19 +57,4 @@ public class KafkaConsumerConfig {
         return factory;
     }
 
-//    @Bean
-//    @DependsOn("kafkaToReactiveMongoRoute")
-//    public Main startCamel()
-//    {
-//        try {
-//            Main main = new Main();
-//            main.configure().addRoutesBuilder(kafkaToReactiveMongoRoute);
-//            main.run();
-//            return main;
-//        }catch (Exception e)
-//        {
-//            System.out.println(e);
-//        }
-//        return null;
-//    }
 }

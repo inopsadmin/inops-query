@@ -16,7 +16,7 @@ eureka:
 
   data:
     mongodb:
-      uri: mongodb://192.168.1.40:27017/CLMS_SERVICE  #ContractLabour  # ✅ MongoDB Connection
+      uri: mongodb://localhost:27017/ContractLabour  # ✅ MongoDB Connection
 
     kafka:
       bootstrap-servers: localhost:9092

@@ -43,25 +43,4 @@ public class ReactiveMongoController {
         return reactiveMongoService.findWithFilters(collection, query);
     }
 
-    // Create a document in a collection
-    @PostMapping("/{collection}")
-    public Mono<ResponseEntity<Object>> create(@PathVariable String collection, @RequestBody Object document) {
-        return reactiveMongoService.create(collection, document)
-                .map(savedDoc -> ResponseEntity.ok(savedDoc));
-    }
-
-    // Update a document in a collection by ID
-    @PutMapping("/{collection}/{id}")
-    public Mono<ResponseEntity<Object>> update(@PathVariable String collection, @PathVariable String id, @RequestBody Object updatedDocument) {
-        return reactiveMongoService.update(collection, id, updatedDocument)
-                .map(updatedDoc -> ResponseEntity.ok(updatedDoc))
-                .defaultIfEmpty(ResponseEntity.notFound().build());
-    }
-
-    // Delete a document by ID
-    @DeleteMapping("/{collection}/{id}")
-    public Mono<ResponseEntity<Void>> delete(@PathVariable String collection, @PathVariable String id) {
-        return reactiveMongoService.delete(collection, id)
-                .then(Mono.just(ResponseEntity.noContent().build()));
-    }
 }

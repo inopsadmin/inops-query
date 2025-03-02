@@ -28,14 +28,24 @@ public class kafkaConsumer {
                         .doOnError(error -> System.err.println("❌ MongoDB Save Failed: " + error.getMessage()))
                         .subscribe();
 
-//                 reactiveMongoService.create(event.getCollectionName(),event.getData())
-//                        .doOnSuccess(result -> System.out.println("✅ Saved in MongoDB: " + result))
-//                        .doOnError(error -> System.err.println("MongoDB Save Failed: " + error.getMessage()));
-
             case "update":
-                // return reactiveMongoService.update(collectionName,"",data);
+                System.out.println("🔄 Calling MongoDB Update...");
+                reactiveMongoService.update(event.getCollectionName(), event.getId(), event.getData())
+                        .doOnSuccess(result -> System.out.println("✅ Successfully Updated: " + result))
+                        .doOnError(error -> System.err.println("❌ Update Failed: " + error.getMessage()))
+                        .subscribe();
+                break;
+
             case "delete":
-                //return reactiveMongoService.delete(collectionName,"");
+                System.out.println("🗑️ Calling MongoDB Delete...");
+                reactiveMongoService.delete(event.getCollectionName(), event.getId())
+                        .doOnSuccess(result -> System.out.println("✅ Successfully Deleted: " + result))
+                        .doOnError(error -> System.err.println("❌ Delete Failed: " + error.getMessage()))
+                        .subscribe();
+                break;
+
+            default:
+                System.err.println("⚠️ Unknown action: " + event.getAction());
 
         }
 

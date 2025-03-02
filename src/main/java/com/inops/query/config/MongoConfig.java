@@ -12,7 +12,7 @@ public class MongoConfig {
 
     @Bean
     public ReactiveMongoTemplate reactiveMongoTemplate() {
-        return new ReactiveMongoTemplate(MongoClients.create("mongodb://192.168.1.40:27017"), "CLMS_SERVICE");
+        return new ReactiveMongoTemplate(MongoClients.create("mongodb://localhost:27017"), "ContractLabour");
     }
 
 }

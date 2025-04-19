@@ -12,7 +12,11 @@ public class MongoConfig {
 
     @Bean
     public ReactiveMongoTemplate reactiveMongoTemplate() {
-        return new ReactiveMongoTemplate(MongoClients.create("mongodb://localhost:27017"), "ContractLabour");
+        return new ReactiveMongoTemplate(MongoClients.create("mongodb://admin:password@192.168.1.23:27017/ContractLabour?authSource=admin"), "ContractLabour");
     }
 
+    @Bean
+    public ReactiveMongoTemplate reactiveMusterMongoTemplate() {
+        return new ReactiveMongoTemplate(MongoClients.create("mongodb://admin:password@192.168.1.23:27017/ContractLabour?authSource=admin"), "ContractLabour");
+    }
 }

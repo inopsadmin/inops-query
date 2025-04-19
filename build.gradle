@@ -47,7 +47,7 @@ dependencies {
 
 	// JAXB for XML Processing (if required)
 	implementation 'jakarta.xml.bind:jakarta.xml.bind-api:4.0.0'
-	implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.3'
+	//implementation 'org.glassfish.jaxb:jaxb-runtime:4.0.3'
 
 	// Lombok (for cleaner code)
 	compileOnly 'org.projectlombok:lombok'

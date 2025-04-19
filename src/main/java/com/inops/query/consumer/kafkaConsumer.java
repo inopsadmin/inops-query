@@ -27,7 +27,7 @@ public class kafkaConsumer {
                         .doOnSuccess(result -> System.out.println("✅ Saved in MongoDB: " + result))
                         .doOnError(error -> System.err.println("❌ MongoDB Save Failed: " + error.getMessage()))
                         .subscribe();
-
+                break;
             case "update":
                 System.out.println("🔄 Calling MongoDB Update...");
                 reactiveMongoService.update(event.getCollectionName(), event.getId(), event.getData())

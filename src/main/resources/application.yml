@@ -1,25 +1,25 @@
 server:
-  port: 8082
+  port: 8086
 
 spring:
   application:
     name: inops-query
 eureka:
   instance:
-    hostname: localhost
+    hostname: INOPS-QUERY
     prefer-ip-address: true
     ip-address: 192.168.1.71
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://192.168.1.71:8761/eureka/
 
 
   data:
     mongodb:
-      uri: mongodb://localhost:27017/ContractLabour  # ✅ MongoDB Connection
+      uri: mongodb://admin:password@192.168.1.23:27017/ContractLabour?authSource=admin  # ✅ MongoDB Connection
 
     kafka:
-      bootstrap-servers: localhost:9092
+      bootstrap-servers: http://192.168.1.23:9092
       consumer:
         group-id: query-service
         auto-offset-reset: earliest

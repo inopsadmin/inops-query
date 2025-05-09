@@ -13,14 +13,14 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class ClassMongoService {
 
-    private final ReactiveMongoTemplate mongoTemplate;
+    private final ReactiveMongoTemplate reactiveMongoTemplate;
 
     public <T> Flux<T> findAll(String collection, Class<T> clazz) {
-        return mongoTemplate.findAll(clazz, collection);
+        return reactiveMongoTemplate.findAll(clazz, collection);
     }
 
     public <T> Mono<T> findById(String collection, String id, Class<T> clazz) {
         Query query = new Query(Criteria.where("_id").is(id));
-        return mongoTemplate.findOne(query, clazz, collection);
+        return reactiveMongoTemplate.findOne(query, clazz, collection);
     }
 }

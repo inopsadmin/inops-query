@@ -1,0 +1,416 @@
+scalar JSON
+scalar DateTime
+
+
+type Query {
+  fetchAllDocuments(collection: String!): [DocumentResponse]
+  fetchAllEmployees(collection: String!): [Employee]
+  getEmployeeById(id: ID!, name: String!): Employee
+}
+
+type DocumentResponse {
+  id: String!
+  data: JSON!
+}
+
+type Employee {
+  id: ID!
+  organizationCode: String!
+  contractorCode: String!
+  tenantId: String!
+  employeeCode: String!
+  firstName: String!
+  middleName: String
+  lastName: String!
+  fatherHusbandName: String
+  gender: String!
+  birthDate: String!
+  bloodGroup: String
+  nationality: String
+  maritalStatus: String
+  marriageDate: String
+  referenceBy: String
+  dateOfJoining: String!
+  contractFrom: String!
+  contractTo: String!
+  contractPeriod: Int!
+  workSkill: WorkSkill!
+  paymentMode: String!
+  busDetail: BusDetail!
+  natureOfWork: NatureOfWork!
+  rejoin: Rejoin!
+  backgroundVerificationRemark: String
+  medicalVerificationRemark: String
+  emailID: EmailID!
+  contactNumber: ContactNumber!
+  covidVaccine: CovidVaccine!
+  deployment: Deployment!
+  weeklyOff: [Int!]!
+  cards: [Card!]!
+  documents: [Document!]!
+  passport: Passport
+  workPermit: WorkPermit
+  labourCard: LabourCard
+  bankDetails: BankDetails
+  insuranceNumber: String
+  mediclaimPolicyNumber: String
+  WCPolicyNumber: String
+  accidentPolicyNumber: String
+  address: Address!
+  familyMember: [FamilyMember!]!
+  highestEducation: HighestEducation!
+  experience: Experience
+  trainings: [Training!]!
+  uploadedDocuments: [UploadedDocument!]!
+  assetAllocated: [AssetAllocated!]!
+  penalty: [Penalty!]!
+  workOrder: [WorkOrder!]!
+  pfNominee: [Nominee!]!
+  gratuityNominee: [Nominee!]!
+  medicalCheckup: [MedicalCheckup!]!
+  disciplinaryAction: [DisciplinaryAction!]!
+  policeVerification: [PoliceVerification!]!
+  accidentRegister: [AccidentRegister!]!
+  status: Status!
+  remark: String
+  auditTrail: AuditTrail!
+  onNoticePeriod: Boolean!
+  manager: String
+  superviser: String
+}
+
+# Nested Types
+type WorkSkill {
+  workSkillCode: String!
+  workSkillTitle: String!
+}
+
+type BusDetail {
+  busNumber: String!
+  busRegistrationNumber: String!
+  route: String!
+}
+
+type NatureOfWork {
+  natureOfWorkCode: String!
+  natureOfWorkTitle: String!
+}
+
+type Rejoin {
+  isRejoining: Boolean!
+  oldEmployeeCode: String
+}
+
+type EmailID {
+  primaryEmailID: String!
+  secondaryEmailID: String
+}
+
+type ContactNumber {
+  primaryContactNo: String!
+  secondarContactNumber: String
+  emergencyContactPerson1: String!
+  emergencyContactNo1: String!
+  emergencyContactPerson2: String
+  emergencyContactNo2: String
+}
+
+type CovidVaccine {
+  vaccine1: Boolean!
+  vaccine2: Boolean!
+  vaccine3: Boolean!
+  vaccine1Certificate: String
+  vaccine2Certificate: String
+  vaccine3Certificate: String
+}
+
+type Deployment {
+  subsidiary: Subsidiary!
+  division: Division!
+  department: Department!
+  subDepartment: SubDepartment!
+  section: Section!
+  employeeCategory: EmployeeCategory!
+  grade: Grade!
+  designation: Designation!
+  location: Location!
+  skillLevel: SkillLevel!
+  contractor: Contractor!
+  effectiveFrom: String!
+  remark: String
+}
+
+type Subsidiary {
+  subsidiaryCode: String!
+  subsidiaryName: String!
+}
+
+type Division {
+  divisionCode: String!
+  divisionName: String!
+}
+
+type Department {
+  departmentCode: String!
+  departmentName: String!
+}
+
+type SubDepartment {
+  subDepartmentCode: String!
+  subDepartmentName: String!
+}
+
+type Section {
+  sectionCode: String!
+  sectionName: String!
+}
+
+type EmployeeCategory {
+  employeeCategoryCode: String!
+  employeeCategoryTitle: String!
+}
+
+type Grade {
+  gradeCode: String!
+  gradeTitle: String!
+}
+
+type Designation {
+  designationCode: String!
+  designationName: String!
+}
+
+type Location {
+  locationCode: String!
+  locationName: String!
+}
+
+type SkillLevel {
+  skilledLevelTitle: String!
+  skilledLevelDescription: String!
+}
+
+type Contractor {
+  contractorCode: String!
+  contractorName: String!
+}
+
+type Card {
+  cardNumber: String!
+  effectiveFrom: String!
+  effectiveTo: String!
+  isPrimaryCard: Boolean!
+}
+
+type Document {
+  documentTypeCode: String!
+  documentTypeTitle: String!
+  identificationNumber: String
+  documentPath: String!
+}
+
+type Passport {
+  passportNumber: String!
+  passportExpiryDate: String!
+  passportPath: String!
+}
+
+type WorkPermit {
+  workpermitNumber: String!
+  workpermitExpiryDate: String!
+  workPermitPath: String!
+}
+
+type LabourCard {
+  labourCardNumber: String!
+  labourcardExpiryDate: String!
+  labourCardPath: String!
+}
+
+type BankDetails {
+  bankName: String!
+  ifscCode: String!
+  branchName: String!
+  accountNumber: String!
+}
+
+type Address {
+  permanentAddress: AddressDetails!
+  temporaryAddress: AddressDetails
+}
+
+type AddressDetails {
+  addressLine1: String!
+  addressLine2: String
+  country: String!
+  state: String!
+  city: String!
+  pinCode: String!
+  taluka: String
+  isVerified: Boolean!
+}
+
+type FamilyMember {
+  memberName: String!
+  relation: String!
+  gender: String!
+  birthDate: String!
+  aadharCard: AadharCard
+  electionCard: ElectionCard
+  panCard: PanCard
+  remark: String
+  isDependent: Boolean!
+}
+
+type AadharCard {
+  aadharCardNumber: String!
+  aadharCardPath: String!
+}
+
+type ElectionCard {
+  electionCardNumber: String!
+  electionCardPath: String!
+}
+
+type PanCard {
+  panCardNumber: String!
+  panCardPath: String!
+}
+
+type HighestEducation {
+  educationTitle: String!
+  courseTitle: String!
+  stream: String!
+  college: String!
+  yearOfPassing: String!
+  monthOfPassing: Int!
+  percentage: String!
+  isVerified: Boolean!
+}
+
+type Experience {
+  companyName: String!
+  fromDate: String!
+  toDate: String!
+  designation: String!
+  filePath: String!
+}
+
+type Training {
+  trainingProgram: TrainingProgram!
+  fromDate: String!
+  toDate: String!
+  totalDays: Int!
+  totalHours: String!
+  validUpto: String!
+  conductedByFaculty: String!
+  conductedByCompany: String!
+  filePath: String!
+}
+
+type TrainingProgram {
+  trainingProgramCode: String!
+  trainingProgramTitle: String!
+}
+
+type UploadedDocument {
+  documentCategory: DocumentCategory!
+  documentType: DocumentType!
+  documentPath: String!
+}
+
+type DocumentCategory {
+  documentCategoryCode: String!
+  documentCategoryTitle: String!
+}
+
+type DocumentType {
+  documentTypeCode: String!
+  documentTypeTitle: String!
+}
+
+type AssetAllocated {
+  asset: Asset!
+  issueDate: String!
+  returnDate: String!
+}
+
+type Asset {
+  assetCode: String!
+  assetName: String!
+  assetType: AssetType!
+}
+
+type AssetType {
+  assetTypeCode: String!
+  assetTypeTitle: String!
+}
+
+type Penalty {
+  dateOfOffence: String!
+  offenceDescription: String!
+  actionTaken: String!
+  fineImposed: Float!
+  month: Int!
+  isCauseShownAgainstFine: Boolean!
+  witnessName: String!
+  fineRealisedDate: String!
+}
+
+type WorkOrder {
+  workOrderNumber: String!
+  effectiveFrom: String!
+  effectiveTo: String!
+}
+
+type Nominee {
+  memberName: String!
+  relation: String!
+  birthDate: String!
+  percentage: String!
+}
+
+type MedicalCheckup {
+  checkupDate: String!
+  nextCheckupDate: String!
+  description: String!
+  documentPath: String!
+}
+
+type DisciplinaryAction {
+  actionTakenOn: String!
+  issueReportedOn: String!
+  issuedescription: String!
+  actionDescription: String!
+  remark: String
+  status: String!
+  documentPath: String!
+}
+
+type PoliceVerification {
+  verificationDate: String!
+  nextVerificationDate: String!
+  description: String!
+  documentPath: String!
+}
+
+type AccidentRegister {
+  dateOfAccident: String!
+  dateOfReport: String!
+  accidentDescription: String!
+  dateOfReturn: String!
+}
+
+type Status {
+  currentStatus: String!
+  resignationDate: String
+  relievingDate: String
+  notToReHire: Boolean!
+}
+
+type AuditTrail {
+  createdBy: String!
+  createdOn: String!
+  updatedBy: String!
+  updatedOn: String!
+}

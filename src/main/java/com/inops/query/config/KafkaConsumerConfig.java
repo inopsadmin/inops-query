@@ -4,6 +4,9 @@ package com.inops.query.config;
 import com.inops.query.camel.KafkaToReactiveMongoRoute;
 
 import com.inops.query.model.KafkaEvent;
+import graphql.scalars.ExtendedScalars;
+import graphql.schema.Coercing;
+import graphql.schema.GraphQLScalarType;
 import lombok.RequiredArgsConstructor;
 import org.apache.camel.main.Main;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -13,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.graphql.execution.RuntimeWiringConfigurer;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 
@@ -56,5 +60,19 @@ public class KafkaConsumerConfig {
         factory.setConsumerFactory(consumerFactory());
         return factory;
     }
+
+//    @Bean
+//    public RuntimeWiringConfigurer runtimeWiringConfigurer() {
+//        return wiringBuilder -> wiringBuilder
+//                .scalar(ExtendedScalars.Json);
+//    }
+    @Bean
+    public RuntimeWiringConfigurer runtimeWiringConfigurer() {
+        return wiringBuilder -> wiringBuilder
+                .scalar(ExtendedScalars.Json)
+                .scalar(ExtendedScalars.Object)
+                .scalar(ExtendedScalars.DateTime);
+    }
+
 
 }

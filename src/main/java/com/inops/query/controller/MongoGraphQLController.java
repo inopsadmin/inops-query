@@ -1,9 +1,13 @@
 package com.inops.query.controller;
 
 import com.inops.query.model.DocumentResponse;
+import com.inops.query.reactive.ClassMongoService;
 import com.inops.query.reactive.EmployeeMongoService;
 import com.inops.query.reactive.ReactiveMongoService;
 import com.inops.query.record.Employee;
+import com.inops.query.record.Workflow;
+import com.inops.query.record.WorkflowManagement;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
@@ -26,9 +30,10 @@ public class MongoGraphQLController {
 
     private final ReactiveMongoService reactiveMongoService;
     private final EmployeeMongoService employeeMongoService;
+    private final ClassMongoService classMongoService;
 
     @QueryMapping
-    public Flux<DocumentResponse> fetchAllDocuments(@Argument String collection) {
+    public Flux<DocumentResponse> fetchAllDocuments(@Argument("collection") String collection) {
         return reactiveMongoService.findAll(collection)
                 .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
                 .map(document -> {
@@ -44,7 +49,7 @@ public class MongoGraphQLController {
     }
 
     @QueryMapping
-    public Flux<Employee> fetchAllEmployees(@Argument String collection) {
+    public Flux<Employee> fetchAllEmployees(@Argument("collection") String collection) {
         return employeeMongoService.findAll(collection)
                 .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
                 .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
@@ -53,11 +58,28 @@ public class MongoGraphQLController {
     }
 
     @QueryMapping
-    public Mono<Employee> getEmployeeById(@Argument String id, @Argument String collection) {
+    public Mono<Employee> getEmployeeById(@Argument("id") String id, @Argument("collection") String collection) {
         return employeeMongoService.findById(collection, id).doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
                 .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
                 .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found!!!")));
     }
-
+    
+    @QueryMapping
+    public Flux<Workflow> fetchAllWorkflows(@Argument("collection") String collection){
+    	return classMongoService.findAll(collection, Workflow.class)
+    			.doOnSubscribe(subscription -> log.info("Query Execution started for Collection: {}", collection))
+    			.doOnError(error -> log.error("Error retrieving document: {}", collection))
+    			.retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+    			.switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+    
+    @QueryMapping
+    public Flux<WorkflowManagement> fetchAllWorkflowManagements(@Argument("collection") String collection){
+    	return classMongoService.findAll(collection, WorkflowManagement.class)
+    			.doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+    			.doOnError(error -> log.error("Error retrieving document: {}", collection))
+    			.retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+    			.switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
 }

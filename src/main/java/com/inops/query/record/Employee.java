@@ -3,7 +3,10 @@ package com.inops.query.record;
 
 import java.util.List;
 
+import org.bson.types.ObjectId;
+
 public record Employee(
+		ObjectId _id,
         String organizationCode,
         String contractorCode,
         String tenantId,

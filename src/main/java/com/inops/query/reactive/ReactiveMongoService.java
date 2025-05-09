@@ -1,7 +1,6 @@
 package com.inops.query.reactive;
 
 import org.bson.Document;
-import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
@@ -11,12 +10,13 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.ChangeStreamEvent;
 import org.springframework.data.mongodb.core.ChangeStreamOptions;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Service
+@Service("reactiveMongoService")
 public class ReactiveMongoService {
 
     private final ReactiveMongoTemplate reactiveMongoTemplate;

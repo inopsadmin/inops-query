@@ -5,7 +5,9 @@ scalar DateTime
 type Query {
   fetchAllDocuments(collection: String!): [DocumentResponse]
   fetchAllEmployees(collection: String!): [Employee]
-  getEmployeeById(id: ID!, name: String!): Employee
+  getEmployeeById(id: ID!, collection: String!): Employee
+  fetchAllWorkflows(collection: String!): [Workflow]
+  fetchAllWorkflowManagements(collection: String!): [WorkflowManagement]
 }
 
 type DocumentResponse {
@@ -13,8 +15,8 @@ type DocumentResponse {
   data: JSON!
 }
 
-type Employee {
-  id: ID!
+type Employee { 
+  _id:ID!
   organizationCode: String!
   contractorCode: String!
   tenantId: String!
@@ -413,4 +415,39 @@ type AuditTrail {
   createdOn: String!
   updatedBy: String!
   updatedOn: String!
+}
+
+type Workflow {
+  _id:  ID!
+  name:  String!
+  initialState:  String!
+  states: [String!]!
+  transitions: [Transition!]!
+}
+
+type Transition{
+  sourceState:  String!
+  targetState:  String!
+  event:  String!
+  action:  String!
+  guard:  String!
+}
+
+type WorkflowManagement{
+  _id:  ID!
+  tenantId:  String!
+  userId:  String!
+  operation:  String!
+  workflow:  String!
+  currentStatus:  String!
+  log:  [Log!]!
+}
+
+type Log{
+  workflowName:  String!
+  stateName:  String!
+  eventName:  String!
+  timestamp:  String!
+  performedBy:  String!
+  isSuccess:  Boolean!
 }

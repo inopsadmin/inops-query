@@ -7,11 +7,23 @@ schema{
 
 type Query {
   fetchAllDocuments(collection: String!): [DocumentResponse]
+  
   fetchAllEmployees(collection: String!): [Employee]
+  getAllEmployeeByIds(id: [ID!]!, collection: String!): [Employee]
   getEmployeeById(id: ID!, collection: String!): Employee
+  
   fetchAllWorkflows(collection: String!): [Workflow]
+  getAllWorkflowByIds(id: [ID!]!, collection: String!): [Workflow]
+  getWorkflowById(id: ID!, collection: String!): Workflow
+  
   fetchAllWorkflowManagements(collection: String!): [WorkflowManagement]
-  getWorkflowsById(id: [ID!]!, collection: String!): [Workflow!]!
+  getAllWorkflowManagementByIds(id: [ID!]!, collection: String!): [WorkflowManagement]
+  getWorkflowManagementById(id: ID!, collection: String!): WorkflowManagement
+  
+  fetchAllFileDetails(collection: String!): [FileDetails]
+  getAllFileDetailsByIds(id: [ID!]!, collection: String!): [FileDetails]
+  getFileDetailsById(id: ID!, collection: String!): FileDetails
+  
 }
 
 type DocumentResponse {
@@ -36,7 +48,7 @@ type Employee {
   maritalStatus: String
   marriageDate: String
   referenceBy: String
-  dateOfJoining: String!
+  dateOfJoining: String
   contractFrom: String!
   contractTo: String!
   contractPeriod: Int!
@@ -51,7 +63,7 @@ type Employee {
   contactNumber: ContactNumber!
   covidVaccine: CovidVaccine!
   deployment: Deployment!
-  weeklyOff: [Int!]!
+  weeklyOff: [Int]
   cards: [Card!]!
   documents: [Document!]!
   passport: Passport
@@ -454,4 +466,16 @@ type Log{
   timestamp:  String!
   performedBy:  String!
   isSuccess:  Boolean!
+}
+
+type FileDetails{
+  _id:  ID!,
+  fileName:  String!,
+  filePath:  String!,
+  fileSize:  String!,
+  workflowName:  String!,
+  status:  String!,
+  remarks:  String,
+  uploadedBy:  String!,
+  createdOn:  String!
 }

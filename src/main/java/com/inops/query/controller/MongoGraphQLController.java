@@ -4,6 +4,7 @@ import com.inops.query.model.DocumentResponse;
 import com.inops.query.reactive.ClassMongoService;
 import com.inops.query.reactive.ReactiveMongoService;
 import com.inops.query.record.Employee;
+import com.inops.query.record.FileDetails;
 import com.inops.query.record.Workflow;
 import com.inops.query.record.WorkflowManagement;
 
@@ -63,6 +64,16 @@ public class MongoGraphQLController {
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
                 .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found!!!")));
     }
+    
+    @QueryMapping
+    public Flux<Employee> getAllEmployeeByIds(@Argument("id") List<String> id, @Argument("collection") String collection){
+    	Query query = new Query(Criteria.where("_id").in(id));
+    	return classMongoService.findWithFilters(collection, query, Employee.class)
+    			.doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
       
     @QueryMapping
     public Flux<Workflow> fetchAllWorkflows(@Argument("collection") String collection){
@@ -71,6 +82,25 @@ public class MongoGraphQLController {
     			.doOnError(error -> log.error("Error retrieving document: {}", collection))
     			.retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
     			.switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+    
+    @QueryMapping
+    public Flux<Workflow> getAllWorkflowByIds(@Argument("id") List<String> id, @Argument("collection") String collection){
+    	Query query = new Query(Criteria.where("_id").in(id));
+    	return classMongoService.findWithFilters(collection, query, Workflow.class)
+    			.doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+    
+    @QueryMapping
+    public Mono<Workflow> getWorkflowById(@Argument("id") String id, @Argument("collection") String collection){
+    	return classMongoService.findById(collection, id, Workflow.class)
+    			.doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found!!!")));
     }
     
     @QueryMapping
@@ -83,9 +113,46 @@ public class MongoGraphQLController {
     }
     
     @QueryMapping
-    public Flux<Workflow> getWorkflowsById(@Argument("id") List<String> id, @Argument("collection") String collection){
+    public Flux<WorkflowManagement> getAllWorkflowManagementByIds(@Argument("id") List<String> id, @Argument("collection") String collection){
     	Query query = new Query(Criteria.where("_id").in(id));
-    	return classMongoService.findWithFilters(collection, query, Workflow.class)
+    	return classMongoService.findWithFilters(collection, query, WorkflowManagement.class)
+    			.doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+    
+    @QueryMapping
+    public Mono<WorkflowManagement> getWorkflowManagementById(@Argument("id") String id, @Argument("collection") String collection){
+    	return classMongoService.findById(collection, id, WorkflowManagement.class)
+    			.doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+    
+    @QueryMapping
+    public Flux<FileDetails> fetchAllFileDetails(@Argument("collection") String collection){
+    	return classMongoService.findAll(collection, FileDetails.class)
+    			.doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+    			.doOnError(error -> log.error("Error retrieving document: {}", collection))
+    			.retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+    			.switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+    
+    @QueryMapping
+    public Flux<FileDetails> getAllFileDetailsByIds(@Argument("id") List<String> id, @Argument("collection") String collection){
+    	Query query = new Query(Criteria.where("_id").in(id));
+    	return classMongoService.findWithFilters(collection, query, FileDetails.class)
+    			.doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+    
+    @QueryMapping
+    public Mono<FileDetails> getFileDetailsById(@Argument("id") String id, @Argument("collection") String collection){
+    	return classMongoService.findById(collection, id, FileDetails.class)
     			.doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
                 .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))

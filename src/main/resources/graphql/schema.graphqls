@@ -1,6 +1,9 @@
 scalar JSON
 scalar DateTime
 
+schema{
+  query: Query
+}
 
 type Query {
   fetchAllDocuments(collection: String!): [DocumentResponse]
@@ -8,6 +11,7 @@ type Query {
   getEmployeeById(id: ID!, collection: String!): Employee
   fetchAllWorkflows(collection: String!): [Workflow]
   fetchAllWorkflowManagements(collection: String!): [WorkflowManagement]
+  getWorkflowsById(id: [ID!]!, collection: String!): [Workflow!]!
 }
 
 type DocumentResponse {

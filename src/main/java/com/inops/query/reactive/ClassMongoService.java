@@ -1,6 +1,8 @@
 package com.inops.query.reactive;
 
 import lombok.RequiredArgsConstructor;
+
+import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
@@ -23,5 +25,9 @@ public class ClassMongoService {
     public <T> Mono<T> findById(String collection, String id, Class<T> clazz) {
         Query query = new Query(Criteria.where("_id").is(id));
         return reactiveMongoTemplate.findOne(query, clazz, collection);
+    }
+    
+    public <T> Flux<T> findWithFilters(String collectionName, Query query, Class<T> clazz) {
+        return reactiveMongoTemplate.find(query, clazz, collectionName);
     }
 }

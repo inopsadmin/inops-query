@@ -48,7 +48,7 @@ type Employee {
   maritalStatus: String
   marriageDate: String
   referenceBy: String
-  dateOfJoining: String
+  dateOfJoining: String!
   contractFrom: String!
   contractTo: String!
   contractPeriod: Int!
@@ -63,7 +63,7 @@ type Employee {
   contactNumber: ContactNumber!
   covidVaccine: CovidVaccine!
   deployment: Deployment!
-  weeklyOff: [Int]
+  weeklyOff: [Int!]!
   cards: [Card!]!
   documents: [Document!]!
   passport: Passport
@@ -469,13 +469,13 @@ type Log{
 }
 
 type FileDetails{
-  _id:  ID!,
-  fileName:  String!,
-  filePath:  String!,
-  fileSize:  String!,
-  workflowName:  String!,
-  status:  String!,
-  remarks:  String,
-  uploadedBy:  String!,
+  _id:  ID!
+  fileName:  String!
+  filePath:  String!
+  fileSize:  String!
+  workflowName:  String!
+  status:  String!
+  remarks:  String
+  uploadedBy:  String!
   createdOn:  String!
 }

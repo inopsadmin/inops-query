@@ -1,5 +1,6 @@
 package com.inops.query.controller;
 
+import com.inops.query.config.CustomGraphQLException;
 import com.inops.query.model.DocumentResponse;
 import com.inops.query.reactive.ClassMongoService;
 import com.inops.query.reactive.ReactiveMongoService;
@@ -8,6 +9,7 @@ import com.inops.query.record.FileDetails;
 import com.inops.query.record.Workflow;
 import com.inops.query.record.WorkflowManagement;
 
+import graphql.GraphQLError;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
@@ -15,8 +17,12 @@ import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.GraphQlExceptionHandler;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
+import org.springframework.graphql.execution.ErrorType;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindException;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.retry.Retry;
@@ -62,7 +68,7 @@ public class MongoGraphQLController {
         return classMongoService.findById(collection, id, Employee.class).doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
                 .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
-                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found!!!")));
+                .switchIfEmpty(Mono.error(new CustomGraphQLException(404, "No matching documents found!!!")));
     }
     
     @QueryMapping
@@ -151,7 +157,7 @@ public class MongoGraphQLController {
     }
     
     @QueryMapping
-    public Mono<FileDetails> getFileDetailsById(@Argument("id") String id, @Argument("collection") String collection){
+    public Mono<FileDetails>   getFileDetailsById(@Argument("id") String id, @Argument("collection") String collection){
     	return classMongoService.findById(collection, id, FileDetails.class)
     			.doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
                 .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))

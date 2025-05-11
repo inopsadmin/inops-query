@@ -9,17 +9,21 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Sinks;
 
 @Service
 @RequiredArgsConstructor
 public class kafkaConsumer {
 
     private final ReactiveMongoService reactiveMongoService;
+    private final Sinks.Many<KafkaEvent> sink = Sinks.many().multicast().onBackpressureBuffer();
 
-    @KafkaListener(topics = "cmd-events", groupId = "query-service")
-    public void consumeAttendanceEvent(KafkaEvent event, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) {
-        System.out.println("Received event from Kafka: " + event);
+
+    @KafkaListener(topics = "cmd-test", groupId = "query-services")
+   public void consumeAttendanceEvent(KafkaEvent event, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) {
+           System.out.println("Received event from Kafka: " + event);
         switch (event.getAction().toLowerCase()) {
             case "insert":
                 System.out.println("calling mongo");
@@ -43,11 +47,22 @@ public class kafkaConsumer {
                         .doOnError(error -> System.err.println("❌ Delete Failed: " + error.getMessage()))
                         .subscribe();
                 break;
-
+            case "sse":
+                sink.tryEmitNext(event);
+                System.out.println("calling mongo");
+                reactiveMongoService.create(event.getCollectionName(), event.getData())
+                        .doOnSuccess(result -> System.out.println("✅ Saved in MongoDB: " + result))
+                        .doOnError(error -> System.err.println("❌ MongoDB Save Failed: " + error.getMessage()))
+                        .subscribe();
+                break;
             default:
                 System.err.println("⚠️ Unknown action: " + event.getAction());
 
         }
 
+    }
+
+    public Flux<KafkaEvent> getMessages() {
+        return sink.asFlux();
     }
 }

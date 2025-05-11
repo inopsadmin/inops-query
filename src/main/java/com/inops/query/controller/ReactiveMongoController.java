@@ -2,13 +2,13 @@ package com.inops.query.controller;
 
 
 import com.inops.query.reactive.ReactiveMongoService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.kafka.common.errors.ResourceNotFoundException;
 import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -21,13 +21,10 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/query/attendance")
 @Log4j2
+@RequiredArgsConstructor
 public class ReactiveMongoController {
 
     private final ReactiveMongoService reactiveMongoService;
-
-    public ReactiveMongoController(ReactiveMongoService reactiveMongoService) {
-        this.reactiveMongoService = reactiveMongoService;
-    }
 
     // Fetch all documents from a collection
     @GetMapping("/{collection}")
@@ -57,22 +54,6 @@ public class ReactiveMongoController {
                 .doOnError(error ->log.error("Error retrieving document:{}",error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
                 .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found !!!")));
-    }
-
-    @GetMapping(value = "stream/{collection}/{id}", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Flux<Document> streamEmployeeUpdates(@PathVariable String collection, @PathVariable String id) {
-
-        return reactiveMongoService.findAllById(collection, id)
-                .doOnSubscribe(subscription -> log.info("Query execution started for collection :{}",collection))
-                .doOnNext (document ->{
-                    if(document.get("_id")instanceof ObjectId){
-                        document.put("_id",document.getObjectId("_id").toHexString());
-                    }
-                    log.info("Transformed document :{}",document);
-                })
-                .doOnError(error ->log.error("Error retrieving document:{}",error.getLocalizedMessage()))
-                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
-                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found !!!")));
     }
 
     // Fetch documents with filters (query parameters)

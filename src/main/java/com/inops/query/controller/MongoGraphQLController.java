@@ -28,7 +28,7 @@ public class MongoGraphQLController {
     private final EmployeeMongoService employeeMongoService;
 
     @QueryMapping
-    public Flux<DocumentResponse> fetchAllDocuments(@Argument String collection) {
+    public Flux<DocumentResponse> fetchAllDocuments(@Argument("collection") String collection) {
         return reactiveMongoService.findAll(collection)
                 .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
                 .map(document -> {
@@ -44,7 +44,7 @@ public class MongoGraphQLController {
     }
 
     @QueryMapping
-    public Flux<Employee> fetchAllEmployees(@Argument String collection) {
+    public Flux<Employee> fetchAllEmployees(@Argument("collection") String collection) {
         return employeeMongoService.findAll(collection)
                 .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
                 .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
@@ -53,7 +53,7 @@ public class MongoGraphQLController {
     }
 
     @QueryMapping
-    public Mono<Employee> getEmployeeById(@Argument String id, @Argument String collection) {
+    public Mono<Employee> getEmployeeById(@Argument("id") String id, @Argument("name") String collection) {
         return employeeMongoService.findById(collection, id).doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
                 .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))

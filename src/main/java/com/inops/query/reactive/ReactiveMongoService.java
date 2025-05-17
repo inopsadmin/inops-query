@@ -36,6 +36,11 @@ public class ReactiveMongoService {
         return reactiveMongoTemplate.findOne(query, Document.class, collectionName);
     }
 
+    public Mono<Document> findByName(String collectionName, String name) {
+        Query query = new Query(Criteria.where("name").is(name));
+        return reactiveMongoTemplate.findOne(query, Document.class, collectionName);
+    }
+
     // Fetch documents based on query parameters
     public Flux<Document> findWithFilters(String collectionName, Query query) {
         return reactiveMongoTemplate.find(query, Document.class, collectionName);

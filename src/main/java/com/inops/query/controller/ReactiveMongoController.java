@@ -56,6 +56,21 @@ public class ReactiveMongoController {
                 .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found !!!")));
     }
 
+    // Fetch a document by ID
+    @GetMapping("/{collection}/name/{name}")
+    public Mono<Document> fetchByName(@PathVariable String collection, @PathVariable String name) {
+        return reactiveMongoService.findByName(collection, name).doOnSubscribe(subscription -> log.info("Query execution started for collection :{}",collection))
+                .doOnNext (document ->{
+                    if(document.get("_id")instanceof ObjectId){
+                        document.put("_id",document.getObjectId("_id").toHexString());
+                    }
+                    log.info("Transformed document :{}",document);
+                })
+                .doOnError(error ->log.error("Error retrieving document:{}",error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found !!!")));
+    }
+
     // Fetch documents with filters (query parameters)
     @GetMapping("/{collection}/search")
     public Flux<Document> fetchWithFilters(@PathVariable String collection, @RequestParam Map<String, String> filters) {

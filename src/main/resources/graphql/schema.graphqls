@@ -1,12 +1,33 @@
 scalar JSON
 scalar DateTime
 
+schema{
+  query: Query
+}
 
 type Query {
   fetchAllDocuments(collection: String!): [DocumentResponse]
+
   fetchAllEmployees(collection: String!): [Employee]
-  getEmployeeById(id: ID!, name: String!): Employee
-}
+  getAllEmployeeByIds(id: [ID!]!, collection: String!): [Employee]
+  getEmployeeById(id: ID!, collection: String!): Employee
+
+  fetchAllWorkflows(collection: String!): [Workflow]
+  getAllWorkflowByIds(id: [ID!]!, collection: String!): [Workflow]
+  getWorkflowById(id: ID!, collection: String!): Workflow
+
+  fetchAllWorkflowManagements(collection: String!): [WorkflowManagement]
+  getAllWorkflowManagementByIds(id: [ID!]!, collection: String!): [WorkflowManagement]
+  getWorkflowManagementById(id: ID!, collection: String!): WorkflowManagement
+
+  fetchAllFileDetails(collection: String!): [FileDetails]
+  getAllFileDetailsByIds(id: [ID!]!, collection: String!): [FileDetails]
+  getFileDetailsById(id: ID!, collection: String!): FileDetails
+
+  fetchAllOrganization(collection: String!): [Organization]
+  getAllOrganizationByIds(id: [ID!]!, collection: String!): [Organization]
+  getOrganizationsById(id: ID!, collection: String!): Organization
+  }
 
 type DocumentResponse {
   id: String!
@@ -14,7 +35,7 @@ type DocumentResponse {
 }
 
 type Employee {
-  id: ID!
+  _id:ID!
   organizationCode: String!
   contractorCode: String!
   tenantId: String!
@@ -413,4 +434,141 @@ type AuditTrail {
   createdOn: String!
   updatedBy: String!
   updatedOn: String!
+}
+
+type Workflow {
+  _id:  ID!
+  name:  String!
+  initialState:  String!
+  states: [String!]!
+  transitions: [Transition!]!
+}
+
+type Transition{
+  sourceState:  String!
+  targetState:  String!
+  event:  String!
+  action:  String!
+  guard:  String!
+}
+
+type WorkflowManagement{
+  _id:  ID!
+  tenantId:  String!
+  userId:  String!
+  operation:  String!
+  workflow:  String!
+  currentStatus:  String!
+  log:  [Log!]!
+}
+
+type Log{
+  workflowName:  String!
+  stateName:  String!
+  eventName:  String!
+  timestamp:  String!
+  performedBy:  String!
+  isSuccess:  Boolean!
+}
+
+type FileDetails{
+  _id:  String!
+  fileName:  String!
+  filePath:  String!
+  fileSize:  String!
+  workflowName:  String!
+  status:  String!
+  description:  String
+  uploadedBy:  String!
+  createdOn:  String!
+  file: String
+}
+
+type Organization {
+  _id: String!
+  organizationName: String!
+  organizationCode: String!
+  addressLine1: String
+  addressLine2: String
+  city: String
+  pinCode: String
+  logoFileName: String
+  description: String
+  emailId: String
+  contactPersonContactNumber: String
+  registrationNo: String
+  tenantCode: String
+  isActive: Int
+  firstMonthOfFinancialYear: Int
+  subsidiaries: [OrgSubsidiary]
+  designations: [OrgDesignation]
+  grades: [OrgGrade]
+  divisions: [OrgDivision]
+  departments: [OrgDepartment]
+  subDepartments: [OrgSubDepartment]
+  sections: [OrgSection]
+}
+
+type OrgSubsidiary {
+  subsidiaryName: String!
+  subsidiaryCode: String!
+  subsidiaryDescription: String
+  location: [OrgSubLocation]
+}
+
+type OrgSubLocation {
+  locationName: String!
+  locationCode: String!
+}
+
+type OrgLocation {
+  locationName: String!
+  locationCode: String!
+  regionCode: String
+  countryCode: String
+  stateCode: String
+  city: String
+  pinCode: String
+}
+
+type OrgDesignation {
+  divisionCode: String!
+  designationCode: String!
+  designationName: String!
+  designationDescription: String
+}
+
+type OrgDivision {
+  subsidiaryCode: String!
+  divisionCode: String!
+  divisionName: String!
+  divisionDescription: String
+}
+
+type OrgDepartment {
+  departmentName: String!
+  departmentCode: String!
+  divisionCode: String!
+  departmentDescription: String
+}
+
+type OrgGrade {
+  gradeCode: String!
+  gradeName: String!
+  gradeDescription: String
+  designationCode: String!
+}
+
+type OrgSubDepartment {
+  subDepartmentName: String!
+  subDepartmentCode: String!
+  departmentCode: String!
+  subDepartmentDescription: String
+}
+
+type OrgSection {
+  sectionName: String!
+  sectionCode: String!
+  subDepartmentCode: String!
+  sectionDescription: String
 }

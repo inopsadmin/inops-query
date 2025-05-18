@@ -23,4 +23,8 @@ public class ClassMongoService {
         Query query = new Query(Criteria.where("_id").is(id));
         return reactiveMongoTemplate.findOne(query, clazz, collection);
     }
+
+    public <T> Flux<T> findWithFilters(String collectionName, Query query, Class<T> clazz) {
+        return reactiveMongoTemplate.find(query, clazz, collectionName);
+    }
 }

@@ -1,6 +1,8 @@
 package com.inops.query.controller;
 
 
+import com.inops.query.config.Util;
+import com.inops.query.model.CriteriaRequest;
 import com.inops.query.reactive.ReactiveMongoService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -86,6 +88,26 @@ public class ReactiveMongoController {
                 .doOnError(error ->log.error("Error retrieving document:{}",error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
                 .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found !!!")));
+    }
+
+    @PostMapping(value = "/{collection}/search")
+    public Flux<Document> fetchWithFilters(
+            @PathVariable String collection,
+            @RequestBody List<CriteriaRequest> criteriaRequests) {
+
+        Query query = Util.getQuery(criteriaRequests);
+
+        return reactiveMongoService.findWithFilters(collection, query)
+                .doOnSubscribe(subscription -> log.info("Query started for collection: {}", collection))
+                .doOnNext(document -> {
+                    if (document.get("_id") instanceof ObjectId) {
+                        document.put("_id", document.getObjectId("_id").toHexString());
+                    }
+                    log.debug("Fetched document: {}", document);
+                })
+                .doOnError(error -> log.error("Mongo query error: {}", error.getMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No documents found in collection: " + collection)));
     }
 
     // Dynamic search by field and list of values

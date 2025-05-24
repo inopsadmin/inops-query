@@ -8,20 +8,18 @@ eureka:
   instance:
     hostname: INOPS-QUERY
     prefer-ip-address: true
-    ip-address: 192.168.1.23
+    ip-address: 192.168.70.176
   client:
     service-url:
-      defaultZone: http://192.168.1.23:8761/eureka/
+      defaultZone: http://192.168.70.176:8761/eureka/
 
 
-  data:
-    mongodb:
-      uri: mongodb://admin:password@192.168.1.23:27017/ContractLabour?authSource=admin&replicaSet=rs0  # ✅ MongoDB Connection
+
 
     kafka:
-      bootstrap-servers: http://192.168.1.23:9092
+      bootstrap-servers: http://49.206.252.89:9092
       consumer:
-        group-id: query-service
+        group-id: query-services
         auto-offset-reset: earliest
         key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
         value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer

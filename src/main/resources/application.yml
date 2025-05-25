@@ -17,7 +17,7 @@ eureka:
 
 
     kafka:
-      bootstrap-servers: http://49.206.252.89:9092
+      bootstrap-servers: http://192.168.70.186:9092
       consumer:
         group-id: query-services
         auto-offset-reset: earliest

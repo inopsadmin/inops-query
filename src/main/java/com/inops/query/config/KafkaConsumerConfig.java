@@ -45,7 +45,7 @@ public class KafkaConsumerConfig {
         //deserializer.setAcceptCaseInsensitiveProperties(true);
 
         Map<String, Object> config = new HashMap<>();
-        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "http://49.206.252.89:9092");
+        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "http://192.168.70.186:9092");
         config.put(ConsumerConfig.GROUP_ID_CONFIG, "query-service");
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer);

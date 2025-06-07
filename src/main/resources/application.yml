@@ -8,16 +8,16 @@ eureka:
   instance:
     hostname: INOPS-QUERY
     prefer-ip-address: true
-    ip-address: 192.168.70.176
+    ip-address:  192.168.71.20
   client:
     service-url:
-      defaultZone: http://192.168.70.176:8761/eureka/
+      defaultZone: http://192.168.71.20:8761/eureka/
 
 
 
 
     kafka:
-      bootstrap-servers: http://192.168.70.186:9092
+      bootstrap-servers: http://122.166.245.97:9093
       consumer:
         group-id: query-services
         auto-offset-reset: earliest
@@ -40,3 +40,11 @@ camel:
     driver:
       reactive:
         change-streams-enabled: true
+
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://122.166.245.97:8080/realms/inops
+          jwk-set-uri: http://122.166.245.97:8080/realms/inops/protocol/openid-connect/certs

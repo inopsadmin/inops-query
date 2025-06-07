@@ -485,90 +485,116 @@ type FileDetails{
 }
 
 type Organization {
-  _id: String!
-  organizationName: String!
-  organizationCode: String!
-  addressLine1: String
-  addressLine2: String
-  city: String
-  pinCode: String
-  logoFileName: String
-  description: String
-  emailId: String
-  contactPersonContactNumber: String
-  registrationNo: String
-  tenantCode: String
-  isActive: Int
-  firstMonthOfFinancialYear: Int
-  subsidiaries: [OrgSubsidiary]
-  designations: [OrgDesignation]
-  grades: [OrgGrade]
-  divisions: [OrgDivision]
-  departments: [OrgDepartment]
-  subDepartments: [OrgSubDepartment]
-  sections: [OrgSection]
+_id: String
+organizationName: String
+organizationCode: String
+addressLine1: String
+addressLine2: String
+city: String
+pinCode: String
+logoFileName: String
+description: String
+emailId: String
+contactPersonContactNumber: String
+registrationNo: String
+tenantCode: String
+isActive: Int
+firstMonthOfFinancialYear: Int
+subsidiaries: [OrgSubsidiary]
+designations: [OrgDesignation]
+grades: [OrgGrade]
+divisions: [OrgDivision]
+departments: [OrgDepartment]
+subDepartments: [OrgSubDepartment]
+sections: [OrgSection]
+location: [OrgLocation]
+employeeCategories: [OrgEmployeeCategory]
 }
 
 type OrgSubsidiary {
-  subsidiaryName: String!
-  subsidiaryCode: String!
-  subsidiaryDescription: String
-  location: [OrgSubLocation]
-}
-
-type OrgSubLocation {
-  locationName: String!
-  locationCode: String!
+subsidiaryName: String
+subsidiaryCode: String
+subsidiaryDescription: String
+organizationCode: String
+locationCode: String
 }
 
 type OrgLocation {
-  locationName: String!
-  locationCode: String!
-  regionCode: String
-  countryCode: String
-  stateCode: String
-  city: String
-  pinCode: String
+locationName: String
+locationCode: String
+regionCode: String
+countryCode: String
+stateCode: String
+city: String
+pinCode: String
+organizationCode: String
 }
 
 type OrgDesignation {
-  divisionCode: String!
-  designationCode: String!
-  designationName: String!
-  designationDescription: String
+divisionCode: String
+subsidiaryCode: String
+organizationCode: String
+locationCode: String
+designationCode: String
+designationName: String
+designationDescription: String
 }
 
 type OrgDivision {
-  subsidiaryCode: String!
-  divisionCode: String!
-  divisionName: String!
-  divisionDescription: String
+subsidiaryCode: String
+organizationCode: String
+locationCode: String
+divisionCode: String
+divisionName: String
+divisionDescription: String
 }
 
 type OrgDepartment {
-  departmentName: String!
-  departmentCode: String!
-  divisionCode: String!
-  departmentDescription: String
+departmentName: String
+departmentCode: String
+divisionCode: String
+subsidiaryCode: String
+organizationCode: String
+locationCode: String
+departmentDescription: String
 }
 
 type OrgGrade {
-  gradeCode: String!
-  gradeName: String!
-  gradeDescription: String
-  designationCode: String!
+gradeCode: String
+gradeName: String
+gradeDescription: String
+divisionCode: String
+subsidiaryCode: String
+organizationCode: String
+locationCode: String
+designationCode: String
 }
 
 type OrgSubDepartment {
-  subDepartmentName: String!
-  subDepartmentCode: String!
-  departmentCode: String!
-  subDepartmentDescription: String
+subDepartmentName: String
+subDepartmentCode: String
+departmentCode: String
+divisionCode: String
+subsidiaryCode: String
+organizationCode: String
+locationCode: String
+subDepartmentDescription: String
 }
 
 type OrgSection {
-  sectionName: String!
-  sectionCode: String!
-  subDepartmentCode: String!
-  sectionDescription: String
+sectionName: String
+sectionCode: String
+subDepartmentCode: String
+departmentCode: String
+divisionCode: String
+subsidiaryCode: String
+organizationCode: String
+locationCode: String
+sectionDescription: String
+}
+
+type OrgEmployeeCategory {
+employeeCategoryCode: String
+employeeCategoryName: String
+employeeCategoryDescription: String
 }

@@ -40,6 +40,8 @@ dependencies {
 	// Service Discovery (Netflix Eureka)
 	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
 	// Apache Camel with Kafka & Reactive Streams
 	implementation 'org.apache.camel.springboot:camel-spring-boot-starter:3.20.2'
 	implementation 'org.apache.camel.springboot:camel-kafka-starter:3.20.2'
@@ -56,6 +58,8 @@ dependencies {
 	// Lombok (for cleaner code)
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.projectlombok:lombok'
+
+
 
 	// Testing
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'

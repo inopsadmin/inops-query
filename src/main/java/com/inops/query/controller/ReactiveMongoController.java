@@ -40,7 +40,8 @@ public class ReactiveMongoController {
                 })
                 .doOnError(error ->log.error("Error retrieving document:{}",error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
-                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found !!!")));
+                .defaultIfEmpty(new Document());
+                //.switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found !!!")));
     }
 
     // Fetch a document by ID
@@ -55,7 +56,8 @@ public class ReactiveMongoController {
                 })
                 .doOnError(error ->log.error("Error retrieving document:{}",error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
-                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found !!!")));
+                .defaultIfEmpty(new Document());
+                //.switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found !!!")));
     }
 
     // Fetch a document by ID
@@ -70,7 +72,8 @@ public class ReactiveMongoController {
                 })
                 .doOnError(error ->log.error("Error retrieving document:{}",error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
-                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found !!!")));
+                .defaultIfEmpty(new Document());
+                //.switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found !!!")));
     }
 
     // Fetch documents with filters (query parameters)
@@ -87,7 +90,8 @@ public class ReactiveMongoController {
                 })
                 .doOnError(error ->log.error("Error retrieving document:{}",error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
-                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found !!!")));
+                .defaultIfEmpty(new Document());
+                //.switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found !!!")));
     }
 
     @PostMapping(value = "/{collection}/search")
@@ -107,7 +111,8 @@ public class ReactiveMongoController {
                 })
                 .doOnError(error -> log.error("Mongo query error: {}", error.getMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
-                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No documents found in collection: " + collection)));
+                .defaultIfEmpty(new Document());
+                //.switchIfEmpty(Flux.error(new ResourceNotFoundException("No documents found in collection: " + collection)));
     }
 
     // Dynamic search by field and list of values
@@ -125,7 +130,8 @@ public class ReactiveMongoController {
                 })
                 .doOnError(error ->log.error("Error retrieving document:{}",error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
-                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found !!!")));
+                .defaultIfEmpty(new Document());
+                //.switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found !!!")));
     }
 
     // POST: /api/{collection}/searchByMultipleFields
@@ -142,7 +148,8 @@ public class ReactiveMongoController {
                 })
                 .doOnError(error ->log.error("Error retrieving document:{}",error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
-                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found !!!")));
+                .defaultIfEmpty(new Document());
+                //.switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found !!!")));
     }
 
 }

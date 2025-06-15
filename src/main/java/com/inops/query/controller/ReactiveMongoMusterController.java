@@ -77,7 +77,7 @@ public class ReactiveMongoMusterController {
     }
 
     // Fetch documents with filters (query parameters)
-    @GetMapping("/{collection}/search")
+    @GetMapping("/map/{collection}/search")
     public Flux<Document> fetchWithFilters(@PathVariable String collection, @RequestParam Map<String, String> filters) {
         Query query = new Query();
         filters.forEach((key, value) -> query.addCriteria(Criteria.where(key).is(value)));

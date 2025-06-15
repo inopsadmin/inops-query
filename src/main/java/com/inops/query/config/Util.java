@@ -99,6 +99,7 @@ public class Util {
 
                     switch (op) {
                         case "eq": andCriterias.add(Criteria.where(field).is(value)); break;
+                        case "is": andCriterias.add(Criteria.where(field).is(value)); break;
                         case "ne": andCriterias.add(Criteria.where(field).ne(value)); break;
                         case "gt": andCriterias.add(Criteria.where(field).gt(value)); break;
                         case "gte": andCriterias.add(Criteria.where(field).gte(value)); break;
@@ -117,6 +118,9 @@ public class Util {
 
                 switch (operator) {
                     case "eq":
+                        query.addCriteria(Criteria.where(field).is(value));
+                        break;
+                    case "is":
                         query.addCriteria(Criteria.where(field).is(value));
                         break;
                     case "ne":

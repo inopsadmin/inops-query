@@ -21,7 +21,7 @@ public class kafkaConsumer {
     private final Sinks.Many<KafkaEvent> sink = Sinks.many().multicast().onBackpressureBuffer();
 
 
-    @KafkaListener(topics = "cmd-test", groupId = "query-services")
+    @KafkaListener(topics = "cmd-query", groupId = "query-services")
    public void consumeAttendanceEvent(KafkaEvent event, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) {
            System.out.println("Received event from Kafka: " + event);
         switch (event.getAction().toLowerCase()) {

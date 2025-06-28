@@ -81,10 +81,14 @@ public class ReactiveMongoMusterService {
         return reactiveMusterMongoTemplate.save(document,collectionName);
     }
 
+    public Flux<Object> saveOrUpdateDocuments(String collectionName, List<Object> documents) {
+        return Flux.fromIterable(documents)
+                .flatMap(doc -> reactiveMusterMongoTemplate.save(doc, collectionName));
+    }
     // Update a document in a collection by ID
-    public Mono<Document> update(String collectionName, String id, Object updatedDocument) {
+    public Mono<Document> update(String collectionName, String id, Object updatedDocument,String key) {
         Query query = new Query(Criteria.where("_id").is(id));
-        return reactiveMusterMongoTemplate.findAndModify(query, new Update().set("data", updatedDocument), Document.class, collectionName);
+        return reactiveMusterMongoTemplate.findAndModify(query, new Update().set(key, updatedDocument), Document.class, collectionName);
     }
 
     // Delete a document by ID

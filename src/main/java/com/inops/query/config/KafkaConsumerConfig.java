@@ -13,6 +13,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -33,6 +34,8 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KafkaConsumerConfig {
 
+    @Value("${kafka.url}")
+    private String kafkaUri;
 
   private KafkaToReactiveMongoRoute kafkaToReactiveMongoRoute;
 
@@ -45,7 +48,7 @@ public class KafkaConsumerConfig {
         //deserializer.setAcceptCaseInsensitiveProperties(true);
 
         Map<String, Object> config = new HashMap<>();
-        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "http://122.166.245.97:9093");
+        config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaUri);
         config.put(ConsumerConfig.GROUP_ID_CONFIG, "query-service");
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
         config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, deserializer);

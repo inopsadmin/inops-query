@@ -32,9 +32,17 @@ public class kafkaMusterConsumer {
                         .doOnError(error -> System.err.println("❌ MongoDB Save Failed: " + error.getMessage()))
                         .subscribe();
                 break;
+            case "insertAll":
+                System.out.println("calling mongo");
+                reactiveMongoMusterService.saveOrUpdateDocuments(event.getCollectionName(), event.getDatas())
+                        .doOnNext(doc -> System.out.println("✅ Saved Document: " + doc))
+                        .doOnComplete(() -> System.out.println("✅ All documents saved successfully in MongoDB"))
+                        .doOnError(error -> System.err.println("❌ MongoDB Save Failed: " + error.getMessage()))
+                        .subscribe();
+                break;
             case "update":
                 System.out.println("🔄 Calling MongoDB Update...");
-                reactiveMongoMusterService.update(event.getCollectionName(), event.getId(), event.getData())
+                reactiveMongoMusterService.update(event.getCollectionName(), event.getId(), event.getData(), event.getKey())
                         .doOnSuccess(result -> System.out.println("✅ Successfully Updated: " + result))
                         .doOnError(error -> System.err.println("❌ Update Failed: " + error.getMessage()))
                         .subscribe();

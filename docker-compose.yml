@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  inops-query:
+    image: inopsadmin/inops-query:0.0.4  # Replace with your actual image name
+    container_name: inops-query
+    ports:
+      - "8086:8086"
+    environment:
+      # Spring
+      SERVER_PORT: 8086
+      SPRING_APPLICATION_NAME: inops-query
+
+      # Eureka Client
+      EUREKA_INSTANCE_HOSTNAME: INOPS-QUERY
+      EUREKA_INSTANCE_PREFER_IP_ADDRESS: "true"
+      EUREKA_INSTANCE_IP_ADDRESS: 192.168.71.156
+      EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE: http://192.168.71.156:8761/eureka/
+
+      # Kafka (spring.kafka.*)
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: http://122.166.245.97:9093
+      SPRING_KAFKA_CONSUMER_GROUP_ID: query-services
+      SPRING_KAFKA_CONSUMER_AUTO_OFFSET_RESET: earliest
+      SPRING_KAFKA_CONSUMER_KEY_DESERIALIZER: org.apache.kafka.common.serialization.StringDeserializer
+      SPRING_KAFKA_CONSUMER_VALUE_DESERIALIZER: org.springframework.kafka.support.serializer.JsonDeserializer
+      SPRING_KAFKA_CONSUMER_PROPERTIES_SPRING_JSON_VALUE_DEFAULT_TYPE: com.inops.query.model.KafkaEvent
+      SPRING_KAFKA_CONSUMER_PROPERTIES_SPRING_JSON_TRUSTED_PACKAGES: "*"
+
+      # Apache Camel Kafka component
+      CAMEL_COMPONENT_KAFKA_BROKERS: http://122.166.245.97:9092
+
+      # MongoDB
+      SPRING_DATA_MONGODB_URI: mongodb://122.166.245.97:27017/your-db-name
+      SPRING_DATA_MONGODB_AUTO_INDEX_CREATION: "true"
+      SPRING_DATA_MONGODB_DRIVER_REACTIVE_CHANGE_STREAMS_ENABLED: "true"
+
+      # OAuth2 / Keycloak
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI: http://122.166.245.97:8080/realms/inops
+      SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI: http://122.166.245.97:8080/realms/inops/protocol/openid-connect/certs
+      KEYCLOAK_JWK_SET_URI: http://122.166.245.97:8080/realms/inops/protocol/openid-connect/certs
+
+      # Custom keys
+      KAFKA_URL: http://122.166.245.97:9092
+      DB_HOST: 122.166.245.97:27017
+
+    networks:
+      - inops-net
+
+networks:
+  inops-net:
+    driver: bridge

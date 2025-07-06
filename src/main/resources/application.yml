@@ -8,10 +8,10 @@ eureka:
   instance:
     hostname: INOPS-QUERY
     prefer-ip-address: true
-    ip-address: 192.168.71.221
+    ip-address: 192.168.64.61
   client:
     service-url:
-      defaultZone: http://192.168.71.221:8761/eureka/
+      defaultZone: http://192.168.64.61:8761/eureka/
 
     kafka:
       bootstrap-servers: http://122.166.245.97:9093
@@ -53,3 +53,5 @@ kafka:
   url: http://122.166.245.97:9093
 db:
   host: 122.166.245.97:27017
+logstash:
+  host: 122.166.245.97

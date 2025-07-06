@@ -55,14 +55,14 @@ public class kafkaMusterConsumer {
                         .doOnError(error -> System.err.println("❌ Delete Failed: " + error.getMessage()))
                         .subscribe();
                 break;
-            case "sse":
-                sink.tryEmitNext(event);
-                System.out.println("calling mongo");
-                reactiveMongoMusterService.create(event.getCollectionName(), event.getData())
-                        .doOnSuccess(result -> System.out.println("✅ Saved in MongoDB: " + result))
-                        .doOnError(error -> System.err.println("❌ MongoDB Save Failed: " + error.getMessage()))
-                        .subscribe();
-                break;
+//            case "sse":
+//                sink.tryEmitNext(event);
+//                System.out.println("calling mongo");
+//                reactiveMongoMusterService.create(event.getCollectionName(), event.getData())
+//                        .doOnSuccess(result -> System.out.println("✅ Saved in MongoDB: " + result))
+//                        .doOnError(error -> System.err.println("❌ MongoDB Save Failed: " + error.getMessage()))
+//                        .subscribe();
+//                break;
             default:
                 System.err.println("⚠️ Unknown action: " + event.getAction());
 
@@ -70,7 +70,7 @@ public class kafkaMusterConsumer {
 
     }
 
-    public Flux<KafkaEvent> getMessages() {
-        return sink.asFlux();
-    }
+//    public Flux<KafkaEvent> getMessages() {
+//        return sink.asFlux();
+//    }
 }

@@ -6,7 +6,7 @@ import org.bson.types.ObjectId;
 
 public record WorkflowManagement(
 		ObjectId _id,
-		String tenantId,
+		String tenantCode,
 		String userId,
 		String operation,
 		String workflow,

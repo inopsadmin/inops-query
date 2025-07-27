@@ -8,9 +8,9 @@ schema{
 type Query {
   fetchAllDocuments(collection: String!): [DocumentResponse]
 
-  fetchAllEmployees(collection: String!): [Employee]
-  getAllEmployeeByIds(id: [ID!]!, collection: String!): [Employee]
-  getEmployeeById(id: ID!, collection: String!): Employee
+  fetchAllEmployees(tenantCode: String!, collection: String!): [Employee]
+  getAllEmployeeByEmployeeIDs(collection: String!, employeeID: [ID!]!, tenantCode: String!): [Employee]
+  getEmployeeByEmployeeID(collection: String!, employeeID: ID!, tenantCode: String!): Employee
 
   fetchAllWorkflows(collection: String!): [Workflow]
   getAllWorkflowByIds(id: [ID!]!, collection: String!): [Workflow]
@@ -20,55 +20,69 @@ type Query {
   getAllWorkflowManagementByIds(id: [ID!]!, collection: String!): [WorkflowManagement]
   getWorkflowManagementById(id: ID!, collection: String!): WorkflowManagement
 
-  fetchAllFileDetails(collection: String!): [FileDetails]
+  fetchAllFileDetails(collection: String!, tenantCode: String!): [FileDetails]
   getAllFileDetailsByIds(id: [ID!]!, collection: String!): [FileDetails]
   getFileDetailsById(id: ID!, collection: String!): FileDetails
 
-  fetchAllOrganization(collection: String!): [Organization]
-  getAllOrganizationByIds(id: [ID!]!, collection: String!): [Organization]
-  getOrganizationsById(id: ID!, collection: String!): Organization
+  fetchAllOrganization(collection: String!, tenantCode:String!): [Organization]
+  getAllOrganizationByCodes(organizationCode: [ID!]!, tenantCode: String!, collection: String!): [Organization]
+  getOrganizationByCode( organizationCode: ID!, tenantCode: String!, collection: String!): Organization
+
+  fetchAllMuster(collection: String!): [Muster]
+  getAllMusterByIds(id: [ID!]!, collection: String!): [Muster]
+  getMustersById(id: ID!, collection: String!): Muster
+
+  fetchAllLeavePolicy(collection: String!): [LeavePolicyRecord]
+  getAllLeavePolicyByIds(id: [ID!]!, collection: String!): [LeavePolicyRecord]
+  getLeavePolicyById(id: ID!, collection: String!): LeavePolicyRecord
+
+  fetchAllLeaveBalance(collection: String!): [EmployeeLeaveBalance]
+  getAllLeaveBalanceByIds(id: [ID!]!, collection: String!): [EmployeeLeaveBalance]
+  getLeaveBalanceById(id: ID!, collection: String!): EmployeeLeaveBalance
+
+  searchEmployees(collection: String!, searchByCode: String, searchByName: String): [Employee]
   }
 
 type DocumentResponse {
-  id: String!
-  data: JSON!
+  id: String
+  data: JSON
 }
 
 type Employee {
-  _id:ID!
-  organizationCode: String!
-  contractorCode: String!
-  tenantId: String!
-  employeeCode: String!
-  firstName: String!
+  _id:ID
+  organizationCode: String
+  contractorCode: String
+  tenantCode: String
+  employeeID: String
+  firstName: String
   middleName: String
-  lastName: String!
+  lastName: String
   fatherHusbandName: String
-  gender: String!
-  birthDate: String!
+  gender: String
+  birthDate: String
   bloodGroup: String
   nationality: String
   maritalStatus: String
   marriageDate: String
   referenceBy: String
-  dateOfJoining: String!
-  contractFrom: String!
-  contractTo: String!
-  contractPeriod: Int!
-  workSkill: WorkSkill!
-  paymentMode: String!
-  busDetail: BusDetail!
-  natureOfWork: NatureOfWork!
-  rejoin: Rejoin!
+  dateOfJoining: String
+  contractFrom: String
+  contractTo: String
+  contractPeriod: Int
+  workSkill: WorkSkill
+  paymentMode: String
+  busDetail: BusDetail
+  natureOfWork: NatureOfWork
+  rejoin: Rejoin
   backgroundVerificationRemark: String
   medicalVerificationRemark: String
-  emailID: EmailID!
-  contactNumber: ContactNumber!
-  covidVaccine: CovidVaccine!
-  deployment: Deployment!
-  weeklyOff: [Int!]!
-  cards: [Card!]!
-  documents: [Document!]!
+  emailID: EmailID
+  contactNumber: ContactNumber
+  covidVaccine: CovidVaccine
+  deployment: Deployment
+  weeklyOff: [Int]
+  cards: [Card]
+  documents: [Document]
   passport: Passport
   workPermit: WorkPermit
   labourCard: LabourCard
@@ -77,524 +91,689 @@ type Employee {
   mediclaimPolicyNumber: String
   WCPolicyNumber: String
   accidentPolicyNumber: String
-  address: Address!
-  familyMember: [FamilyMember!]!
-  highestEducation: HighestEducation!
+  address: Address
+  familyMember: [FamilyMember]
+  highestEducation: HighestEducation
   experience: Experience
-  trainings: [Training!]!
-  uploadedDocuments: [UploadedDocument!]!
-  assetAllocated: [AssetAllocated!]!
-  penalty: [Penalty!]!
-  workOrder: [WorkOrder!]!
-  pfNominee: [Nominee!]!
-  gratuityNominee: [Nominee!]!
-  medicalCheckup: [MedicalCheckup!]!
-  disciplinaryAction: [DisciplinaryAction!]!
-  policeVerification: [PoliceVerification!]!
-  accidentRegister: [AccidentRegister!]!
-  status: Status!
+  trainings: [Training]
+  uploadedDocuments: [UploadedDocument]
+  assetAllocated: [AssetAllocated]
+  penalty: [Penalty]
+  workOrder: [WorkOrder]
+  pfNominee: [Nominee]
+  gratuityNominee: [Nominee]
+  medicalCheckup: [MedicalCheckup]
+  disciplinaryAction: [DisciplinaryAction]
+  policeVerification: [PoliceVerification]
+  accidentRegister: [AccidentRegister]
+  status: Status
   remark: String
-  auditTrail: AuditTrail!
-  onNoticePeriod: Boolean!
+  auditTrail: AuditTrail
+  onNoticePeriod: Boolean
   manager: String
   superviser: String
 }
 
 # Nested Types
 type WorkSkill {
-  workSkillCode: String!
-  workSkillTitle: String!
+  workSkillCode: String
+  workSkillTitle: String
 }
 
 type BusDetail {
-  busNumber: String!
-  busRegistrationNumber: String!
-  route: String!
+  busNumber: String
+  busRegistrationNumber: String
+  route: String
 }
 
 type NatureOfWork {
-  natureOfWorkCode: String!
-  natureOfWorkTitle: String!
+  natureOfWorkCode: String
+  natureOfWorkTitle: String
 }
 
 type Rejoin {
-  isRejoining: Boolean!
+  isRejoining: Boolean
   oldEmployeeCode: String
 }
 
 type EmailID {
-  primaryEmailID: String!
+  primaryEmailID: String
   secondaryEmailID: String
 }
 
 type ContactNumber {
-  primaryContactNo: String!
+  primaryContactNo: String
   secondarContactNumber: String
-  emergencyContactPerson1: String!
-  emergencyContactNo1: String!
+  emergencyContactPerson1: String
+  emergencyContactNo1: String
   emergencyContactPerson2: String
   emergencyContactNo2: String
 }
 
 type CovidVaccine {
-  vaccine1: Boolean!
-  vaccine2: Boolean!
-  vaccine3: Boolean!
+  vaccine1: Boolean
+  vaccine2: Boolean
+  vaccine3: Boolean
   vaccine1Certificate: String
   vaccine2Certificate: String
   vaccine3Certificate: String
 }
 
 type Deployment {
-  subsidiary: Subsidiary!
-  division: Division!
-  department: Department!
-  subDepartment: SubDepartment!
-  section: Section!
-  employeeCategory: EmployeeCategory!
-  grade: Grade!
-  designation: Designation!
-  location: Location!
-  skillLevel: SkillLevel!
-  contractor: Contractor!
-  effectiveFrom: String!
+  subsidiary: Subsidiary
+  division: Division
+  department: Department
+  subDepartment: SubDepartment
+  section: Section
+  employeeCategory: EmployeeCategory
+  grade: Grade
+  designation: Designation
+  location: Location
+  skillLevel: SkillLevel
+  contractor: Contractor
+  effectiveFrom: String
   remark: String
 }
 
 type Subsidiary {
-  subsidiaryCode: String!
-  subsidiaryName: String!
+  subsidiaryCode: String
+  subsidiaryName: String
 }
 
 type Division {
-  divisionCode: String!
-  divisionName: String!
+  divisionCode: String
+  divisionName: String
 }
 
 type Department {
-  departmentCode: String!
-  departmentName: String!
+  departmentCode: String
+  departmentName: String
 }
 
 type SubDepartment {
-  subDepartmentCode: String!
-  subDepartmentName: String!
+  subDepartmentCode: String
+  subDepartmentName: String
 }
 
 type Section {
-  sectionCode: String!
-  sectionName: String!
+  sectionCode: String
+  sectionName: String
 }
 
 type EmployeeCategory {
-  employeeCategoryCode: String!
-  employeeCategoryTitle: String!
+  employeeCategoryCode: String
+  employeeCategoryTitle: String
 }
 
 type Grade {
-  gradeCode: String!
-  gradeTitle: String!
+  gradeCode: String
+  gradeTitle: String
 }
 
 type Designation {
-  designationCode: String!
-  designationName: String!
+  designationCode: String
+  designationName: String
 }
 
 type Location {
-  locationCode: String!
-  locationName: String!
+  locationCode: String
+  locationName: String
 }
 
 type SkillLevel {
-  skilledLevelTitle: String!
-  skilledLevelDescription: String!
+  skilledLevelTitle: String
+  skilledLevelDescription: String
 }
 
 type Contractor {
-  contractorCode: String!
-  contractorName: String!
+  contractorCode: String
+  contractorName: String
 }
 
 type Card {
-  cardNumber: String!
-  effectiveFrom: String!
-  effectiveTo: String!
-  isPrimaryCard: Boolean!
+  cardNumber: String
+  effectiveFrom: String
+  effectiveTo: String
+  isPrimaryCard: Boolean
 }
 
 type Document {
-  documentTypeCode: String!
-  documentTypeTitle: String!
+  documentTypeCode: String
+  documentTypeTitle: String
   identificationNumber: String
-  documentPath: String!
+  documentPath: String
 }
 
 type Passport {
-  passportNumber: String!
-  passportExpiryDate: String!
-  passportPath: String!
+  passportNumber: String
+  passportExpiryDate: String
+  passportPath: String
 }
 
 type WorkPermit {
-  workpermitNumber: String!
-  workpermitExpiryDate: String!
-  workPermitPath: String!
+  workpermitNumber: String
+  workpermitExpiryDate: String
+  workPermitPath: String
 }
 
 type LabourCard {
-  labourCardNumber: String!
-  labourcardExpiryDate: String!
-  labourCardPath: String!
+  labourCardNumber: String
+  labourcardExpiryDate: String
+  labourCardPath: String
 }
 
 type BankDetails {
-  bankName: String!
-  ifscCode: String!
-  branchName: String!
-  accountNumber: String!
+  bankName: String
+  ifscCode: String
+  branchName: String
+  accountNumber: String
 }
 
 type Address {
-  permanentAddress: AddressDetails!
+  permanentAddress: AddressDetails
   temporaryAddress: AddressDetails
 }
 
 type AddressDetails {
-  addressLine1: String!
+  addressLine1: String
   addressLine2: String
-  country: String!
-  state: String!
-  city: String!
-  pinCode: String!
+  country: String
+  state: String
+  city: String
+  pinCode: String
   taluka: String
-  isVerified: Boolean!
+  isVerified: Boolean
 }
 
 type FamilyMember {
-  memberName: String!
-  relation: String!
-  gender: String!
-  birthDate: String!
+  memberName: String
+  relation: String
+  gender: String
+  birthDate: String
   aadharCard: AadharCard
   electionCard: ElectionCard
   panCard: PanCard
   remark: String
-  isDependent: Boolean!
+  isDependent: Boolean
 }
 
 type AadharCard {
-  aadharCardNumber: String!
-  aadharCardPath: String!
+  aadharCardNumber: String
+  aadharCardPath: String
 }
 
 type ElectionCard {
-  electionCardNumber: String!
-  electionCardPath: String!
+  electionCardNumber: String
+  electionCardPath: String
 }
 
 type PanCard {
-  panCardNumber: String!
-  panCardPath: String!
+  panCardNumber: String
+  panCardPath: String
 }
 
 type HighestEducation {
-  educationTitle: String!
-  courseTitle: String!
-  stream: String!
-  college: String!
-  yearOfPassing: String!
-  monthOfPassing: Int!
-  percentage: String!
-  isVerified: Boolean!
+  educationTitle: String
+  courseTitle: String
+  stream: String
+  college: String
+  yearOfPassing: String
+  monthOfPassing: Int
+  percentage: String
+  isVerified: Boolean
 }
 
 type Experience {
-  companyName: String!
-  fromDate: String!
-  toDate: String!
-  designation: String!
-  filePath: String!
+  companyName: String
+  fromDate: String
+  toDate: String
+  designation: String
+  filePath: String
 }
 
 type Training {
-  trainingProgram: TrainingProgram!
-  fromDate: String!
-  toDate: String!
-  totalDays: Int!
-  totalHours: String!
-  validUpto: String!
-  conductedByFaculty: String!
-  conductedByCompany: String!
-  filePath: String!
+  trainingProgram: TrainingProgram
+  fromDate: String
+  toDate: String
+  totalDays: Int
+  totalHours: String
+  validUpto: String
+  conductedByFaculty: String
+  conductedByCompany: String
+  filePath: String
 }
 
 type TrainingProgram {
-  trainingProgramCode: String!
-  trainingProgramTitle: String!
+  trainingProgramCode: String
+  trainingProgramTitle: String
 }
 
 type UploadedDocument {
-  documentCategory: DocumentCategory!
-  documentType: DocumentType!
-  documentPath: String!
+  documentCategory: DocumentCategory
+  documentType: DocumentType
+  documentPath: String
 }
 
 type DocumentCategory {
-  documentCategoryCode: String!
-  documentCategoryTitle: String!
+  documentCategoryCode: String
+  documentCategoryTitle: String
 }
 
 type DocumentType {
-  documentTypeCode: String!
-  documentTypeTitle: String!
+  documentTypeCode: String
+  documentTypeTitle: String
 }
 
 type AssetAllocated {
-  asset: Asset!
-  issueDate: String!
-  returnDate: String!
+  asset: Asset
+  issueDate: String
+  returnDate: String
 }
 
 type Asset {
-  assetCode: String!
-  assetName: String!
-  assetType: AssetType!
+  assetCode: String
+  assetName: String
+  assetType: AssetType
 }
 
 type AssetType {
-  assetTypeCode: String!
-  assetTypeTitle: String!
+  assetTypeCode: String
+  assetTypeTitle: String
 }
 
 type Penalty {
-  dateOfOffence: String!
-  offenceDescription: String!
-  actionTaken: String!
-  fineImposed: Float!
-  month: Int!
-  isCauseShownAgainstFine: Boolean!
-  witnessName: String!
-  fineRealisedDate: String!
+  dateOfOffence: String
+  offenceDescription: String
+  actionTaken: String
+  fineImposed: Float
+  month: Int
+  isCauseShownAgainstFine: Boolean
+  witnessName: String
+  fineRealisedDate: String
 }
 
 type WorkOrder {
-  workOrderNumber: String!
-  effectiveFrom: String!
-  effectiveTo: String!
+  workOrderNumber: String
+  effectiveFrom: String
+  effectiveTo: String
 }
 
 type Nominee {
-  memberName: String!
-  relation: String!
-  birthDate: String!
-  percentage: String!
+  memberName: String
+  relation: String
+  birthDate: String
+  percentage: String
 }
 
 type MedicalCheckup {
-  checkupDate: String!
-  nextCheckupDate: String!
-  description: String!
-  documentPath: String!
+  checkupDate: String
+  nextCheckupDate: String
+  description: String
+  documentPath: String
 }
 
 type DisciplinaryAction {
-  actionTakenOn: String!
-  issueReportedOn: String!
-  issuedescription: String!
-  actionDescription: String!
+  actionTakenOn: String
+  issueReportedOn: String
+  issuedescription: String
+  actionDescription: String
   remark: String
-  status: String!
-  documentPath: String!
+  status: String
+  documentPath: String
 }
 
 type PoliceVerification {
-  verificationDate: String!
-  nextVerificationDate: String!
-  description: String!
-  documentPath: String!
+  verificationDate: String
+  nextVerificationDate: String
+  description: String
+  documentPath: String
 }
 
 type AccidentRegister {
-  dateOfAccident: String!
-  dateOfReport: String!
-  accidentDescription: String!
-  dateOfReturn: String!
+  dateOfAccident: String
+  dateOfReport: String
+  accidentDescription: String
+  dateOfReturn: String
 }
 
 type Status {
-  currentStatus: String!
+  currentStatus: String
   resignationDate: String
   relievingDate: String
-  notToReHire: Boolean!
+  notToReHire: Boolean
 }
 
 type AuditTrail {
-  createdBy: String!
-  createdOn: String!
-  updatedBy: String!
-  updatedOn: String!
+  createdBy: String
+  createdOn: String
+  updatedBy: String
+  updatedOn: String
 }
 
 type Workflow {
-  _id:  ID!
-  name:  String!
-  initialState:  String!
-  states: [String!]!
-  transitions: [Transition!]!
+  _id:  ID
+  name:  String
+  initialState:  String
+  states: [String]
+  transitions: [Transition]
 }
 
 type Transition{
-  sourceState:  String!
-  targetState:  String!
-  event:  String!
-  action:  String!
-  guard:  String!
+  sourceState:  String
+  targetState:  String
+  event:  String
+  action:  String
+  guard:  String
 }
 
 type WorkflowManagement{
-  _id:  ID!
-  tenantId:  String!
-  userId:  String!
-  operation:  String!
-  workflow:  String!
-  currentStatus:  String!
-  log:  [Log!]!
+  _id:  ID
+  tenantCode:  String
+  userId:  String
+  operation:  String
+  workflow:  String
+  currentStatus:  String
+  log:  [Log]
 }
 
 type Log{
-  workflowName:  String!
-  stateName:  String!
-  eventName:  String!
-  timestamp:  String!
-  performedBy:  String!
-  isSuccess:  Boolean!
+  workflowName:  String
+  stateName:  String
+  eventName:  String
+  timestamp:  String
+  performedBy:  String
+  isSuccess:  Boolean
 }
 
 type FileDetails{
-  _id:  String!
-  fileName:  String!
-  filePath:  String!
-  fileSize:  String!
-  workflowName:  String!
-  status:  String!
+  _id:  String
+  tenantCode:  String
+  fileName:  String
+  filePath:  String
+  fileSize:  String
+  workflowName:  String
+  status:  String
   description:  String
-  uploadedBy:  String!
-  createdOn:  String!
+  uploadedBy:  String
+  createdOn:  String
   file: String
 }
 
 type Organization {
-_id: String
-organizationName: String
-organizationCode: String
-addressLine1: String
-addressLine2: String
-city: String
-pinCode: String
-logoFileName: String
-description: String
-emailId: String
-contactPersonContactNumber: String
-registrationNo: String
-tenantCode: String
-isActive: Int
-firstMonthOfFinancialYear: Int
-subsidiaries: [OrgSubsidiary]
-designations: [OrgDesignation]
-grades: [OrgGrade]
-divisions: [OrgDivision]
-departments: [OrgDepartment]
-subDepartments: [OrgSubDepartment]
-sections: [OrgSection]
-location: [OrgLocation]
-employeeCategories: [OrgEmployeeCategory]
+  _id: String
+  organizationName: String
+  organizationCode: String
+  addressLine1: String
+  addressLine2: String
+  city: String
+  pinCode: String
+  logoFileName: String
+  description: String
+  emailId: String
+  contactPersonContactNumber: String
+  registrationNo: String
+  tenantCode: String
+  isActive: Int
+  firstMonthOfFinancialYear: Int
+  subsidiaries: [OrgSubsidiary]
+  designations: [OrgDesignation]
+  grades: [OrgGrade]
+  divisions: [OrgDivision]
+  departments: [OrgDepartment]
+  subDepartments: [OrgSubDepartment]
+  sections: [OrgSection]
+  location: [OrgLocation]
+  employeeCategories: [OrgEmployeeCategory]
+  reasonCodes: [OrgReasonCode]
+}
+
+type OrgReasonCode {
+  reasonCode: String
+  reasonName: String
 }
 
 type OrgSubsidiary {
-subsidiaryName: String
-subsidiaryCode: String
-subsidiaryDescription: String
-organizationCode: String
-locationCode: String
+  subsidiaryName: String
+  subsidiaryCode: String
+  subsidiaryDescription: String
+  organizationCode: String
+  locationCode: String
 }
 
 type OrgLocation {
-locationName: String
-locationCode: String
-regionCode: String
-countryCode: String
-stateCode: String
-city: String
-pinCode: String
-organizationCode: String
+  locationName: String
+  locationCode: String
+  regionCode: String
+  countryCode: String
+  stateCode: String
+  city: String
+  pinCode: String
+  organizationCode: String
 }
 
 type OrgDesignation {
-divisionCode: String
-subsidiaryCode: String
-organizationCode: String
-locationCode: String
-designationCode: String
-designationName: String
-designationDescription: String
+  divisionCode: String
+  subsidiaryCode: String
+  organizationCode: String
+  locationCode: String
+  designationCode: String
+  designationName: String
+  designationDescription: String
 }
 
 type OrgDivision {
-subsidiaryCode: String
-organizationCode: String
-locationCode: String
-divisionCode: String
-divisionName: String
-divisionDescription: String
+  subsidiaryCode: String
+  organizationCode: String
+  locationCode: String
+  divisionCode: String
+  divisionName: String
+  divisionDescription: String
 }
 
 type OrgDepartment {
-departmentName: String
-departmentCode: String
-divisionCode: String
-subsidiaryCode: String
-organizationCode: String
-locationCode: String
-departmentDescription: String
+  departmentName: String
+  departmentCode: String
+  divisionCode: String
+  subsidiaryCode: String
+  organizationCode: String
+  locationCode: String
+  departmentDescription: String
 }
 
 type OrgGrade {
-gradeCode: String
-gradeName: String
-gradeDescription: String
-divisionCode: String
-subsidiaryCode: String
-organizationCode: String
-locationCode: String
-designationCode: String
+  gradeCode: String
+  gradeName: String
+  gradeDescription: String
+  divisionCode: String
+  subsidiaryCode: String
+  organizationCode: String
+  locationCode: String
+  designationCode: String
 }
 
 type OrgSubDepartment {
-subDepartmentName: String
-subDepartmentCode: String
-departmentCode: String
-divisionCode: String
-subsidiaryCode: String
-organizationCode: String
-locationCode: String
-subDepartmentDescription: String
+  subDepartmentName: String
+  subDepartmentCode: String
+  departmentCode: String
+  divisionCode: String
+  subsidiaryCode: String
+  organizationCode: String
+  locationCode: String
+  subDepartmentDescription: String
 }
 
 type OrgSection {
-sectionName: String
-sectionCode: String
-subDepartmentCode: String
-departmentCode: String
-divisionCode: String
-subsidiaryCode: String
-organizationCode: String
-locationCode: String
-sectionDescription: String
+  sectionName: String
+  sectionCode: String
+  subDepartmentCode: String
+  departmentCode: String
+  divisionCode: String
+  subsidiaryCode: String
+  organizationCode: String
+  locationCode: String
+  sectionDescription: String
 }
 
 type OrgEmployeeCategory {
-employeeCategoryCode: String
-employeeCategoryName: String
-employeeCategoryDescription: String
+  employeeCategoryCode: String
+  employeeCategoryName: String
+  employeeCategoryDescription: String
+}
+
+type Muster {
+    id: ID
+    month: String
+    year: String
+    employeeId: String
+    attendanceDetails: [AttendanceDetail]
+}
+
+type AttendanceDetail {
+    date: String
+    shiftCode: String
+    attendanceID: String
+    hoursWorked: Int
+    lateIn: Int
+    earlyOut: Int
+    extraHoursPostShift: Int
+    extraHoursPreShift: Int
+    extraHours: Int
+    personalOut: Int
+    officialOut: Int
+    otHours: Int
+    punchDetails: PunchDetails
+}
+
+type PunchDetails {
+    inPunches: [String]
+    outPunches: [String]
+    defaultPunches: [String]
+}
+
+type LeavePolicyRecord {
+  _id: String
+  organizationCode: String
+  tenantCode: String
+  subsidiary: Subsidiary
+  location: Location
+  designation: Designation
+  employeeCategory: [String]
+  leavePolicy: LeavePolicy
+}
+
+type LeavePolicy {
+  leaveCode: String
+  leaveTitle: String
+  effectiveFrom: String
+  genderAllowed: String
+  maritalStatus: [String]
+  minimumServicePeriodRequired: Int
+  maximumLeaveAllowed: [MaximumLeaveAllowed]
+  maximumApplicationAllowed: [MaximumApplicationAllowed]
+  minimumDaysPerApplication: Float
+  maximumDaysPerApplication: Int
+  halfDayAllowed: Boolean
+  sandwichHolidayAsLeave: SandwichLeave
+  sandwichWeekOffAsLeave: SandwichLeave
+  canStartOrEndOnHoliday: Boolean
+  canStartOrEndOnWeekOff: Boolean
+  preApplication: PreApplication
+  maximumBackDaysApplicationAllowed: Int
+  maximumFutureDaysApplicationAllowed: Int
+  requireDocsIfLeaveDaysExceeds: Int
+  allowedInNoticePeriod: Boolean
+  alertManagerAfterApproval: Boolean
+  alertManagerDaysBeforeLeaveStart: Int
+  delegateApplicable: Boolean
+  reminderFrequencyToApprover: Int
+  autoApproval: AutoApproval
+  cannotCombineWith: CannotCombineWith
+  balance: Balance
+  leaveAccrual: LeaveAccrual
+  encashment: Encashment
+  leaveType: String,
+  leaveCategory: String
+}
+
+type MaximumLeaveAllowed {
+  type: String
+  daysAllowed: Int
+}
+
+type MaximumApplicationAllowed {
+  type: String
+  count: Int
+}
+
+type SandwichLeave {
+  countAsLeave: Boolean
+  minimumLeaveDays: Int
+}
+
+type PreApplication {
+  leaveDaysMoreThan: Int
+  applyBeforeDays: Int
+}
+
+type AutoApproval {
+  autoApprovalAllowed: Boolean
+  autoApproveIfDateCrossed: Boolean
+  daysForAutoApproval: Int
+}
+
+type CannotCombineWith {
+  prefix: [String]
+  postfix: [String]
+}
+
+type Balance {
+  balanceValidation: Boolean
+  allowedNegativeBalance: Int
+  minServicePeriodRequired: Int
+  lapseLeaveBalanceAtYearEnd: String
+  maximumBalanceAllowed: Int
+}
+
+type LeaveAccrual {
+  accrualType: String
+  dayId: Int
+  accrualPolicy: AccrualPolicy
+  accrualInAdvance: Boolean
+  maximumBalanceCarriedForward: Int
+  excludedDaysForAccrual: [String]
+}
+
+type AccrualPolicy {
+  accrualDays: Float
+  workingDays: Int
+}
+
+type Encashment {
+  encashmentAllowed: Boolean
+  minimumBalanceRequired: Int
+  maximumAllowedEncashment: Int
+  autoEncashment: Boolean
+  applicationRequired: Boolean
+  maximumApplicationAllowedYearly: Int
+  maximumEncashmentPerApplication: Int
+}
+
+type EmployeeLeaveBalance {
+  _id: String
+  organizationCode: String
+  tenantCode: String
+  employeeID: String
+  balances: [LeaveBalance]
+}
+
+type LeaveBalance {
+  leaveCode: String
+  lastCreditDate: String
+  openingBalance: Float
+  closingBalance: Float
+  availed: Float
+  encashed: Float
+  carryForward: Float
+  previousCarryForward: Float
+  balance: Float
 }

@@ -32,7 +32,7 @@ public class kafkaMusterConsumer {
                         .doOnError(error -> System.err.println("❌ MongoDB Save Failed: " + error.getMessage()))
                         .subscribe();
                 break;
-            case "insertAll":
+            case "insertall":
                 System.out.println("calling mongo");
                 reactiveMongoMusterService.saveOrUpdateDocuments(event.getCollectionName(), event.getDatas())
                         .doOnNext(doc -> System.out.println("✅ Saved Document: " + doc))

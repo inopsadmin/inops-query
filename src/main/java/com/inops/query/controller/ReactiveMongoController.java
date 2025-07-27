@@ -152,4 +152,15 @@ public class ReactiveMongoController {
                 //.switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found !!!")));
     }
 
+    @PostMapping("/{collection}/count")
+    public Mono<Long> fetchCountWithFilters(@PathVariable("collection") String collection,
+                                            @RequestBody List<CriteriaRequest> criteriaRequests) {
+        Query query = Util.getQuery(criteriaRequests);
+        return reactiveMongoService.findCountWithFilters(collection, query)
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection :{}", collection))
+                .doOnNext(count -> {
+                    log.info("Count of documents :{}", count);
+                }).doOnError(error -> log.error("Error retrieving count of document:{}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2))).defaultIfEmpty(0L);
+    }
 }

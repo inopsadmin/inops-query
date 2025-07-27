@@ -78,6 +78,10 @@ public class ReactiveMongoService {
                 .map(ChangeStreamEvent::getBody);
     }
 
+    public Mono<Long> findCountWithFilters(String collectionName, Query query) {
+        return reactiveMongoTemplate.count(query, Document.class, collectionName);
+    }
+
     // Create a new document in a collection
     public Mono<Object> create(String collectionName, Object document) {
         return reactiveMongoTemplate.save(document,collectionName);
@@ -98,5 +102,9 @@ public class ReactiveMongoService {
     public Mono<Void> delete(String collectionName, String id) {
         Query query = new Query(Criteria.where("_id").is(id));
         return reactiveMongoTemplate.remove(query, Document.class, collectionName).then();
+    }
+    public Mono<Void> deleteAll(String collectionName, List<Object> datas, String key) {
+        Query query = new Query(Criteria.where(key).in(datas));
+        return reactiveMongoTemplate.findAllAndRemove(query, Document.class, collectionName).then();
     }
 }

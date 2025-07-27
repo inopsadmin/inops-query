@@ -6,8 +6,8 @@ import java.util.List;
 public record Employee(
         String organizationCode,
         String contractorCode,
-        String tenantId,
-        String employeeCode,
+        String tenantCode,
+        String employeeID,
         String firstName,
         String middleName,
         String lastName,

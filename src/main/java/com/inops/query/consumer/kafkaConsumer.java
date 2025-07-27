@@ -32,7 +32,7 @@ public class kafkaConsumer {
                         .doOnError(error -> System.err.println("❌ MongoDB Save Failed: " + error.getMessage()))
                         .subscribe();
                 break;
-            case "insertAll":
+            case "insertall":
                 System.out.println("calling mongo");
                 reactiveMongoService.saveOrUpdateDocuments(event.getCollectionName(), event.getDatas())
                         .doOnNext(doc -> System.out.println("✅ Saved Document: " + doc))
@@ -53,6 +53,13 @@ public class kafkaConsumer {
                 reactiveMongoService.delete(event.getCollectionName(), event.getId())
                         .doOnSuccess(result -> System.out.println("✅ Successfully Deleted: " + result))
                         .doOnError(error -> System.err.println("❌ Delete Failed: " + error.getMessage()))
+                        .subscribe();
+                break;
+            case "deleteall":
+                System.out.println("🗑️ Calling MongoDB DeleteAll...");
+                reactiveMongoService.deleteAll(event.getCollectionName(), event.getDatas(), event.getKey())
+                        .doOnSuccess(result -> System.out.println("✅ All documents Successfully Deleted: " + result))
+                        .doOnError(error -> System.err.println("❌ DeleteAll Failed: " + error.getMessage()))
                         .subscribe();
                 break;
             case "sse":

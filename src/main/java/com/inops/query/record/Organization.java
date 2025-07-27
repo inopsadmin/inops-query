@@ -27,7 +27,8 @@ public record Organization(
         List<OrgSubDepartment> subDepartments,
         List<OrgSection> sections,
         List<OrgEmployeeCategory> employeeCategories,
-        List<OrgLocation> location
+        List<OrgLocation> location,
+        List<OrgReasonCode> reasonCodes
 ) {
 
     public record OrgSubsidiary(
@@ -116,5 +117,8 @@ public record Organization(
             String employeeCategoryName,
             String employeeCategoryDescription
     ) {}
-
+    public record OrgReasonCode(
+            String reasonCode,
+            String reasonName
+    ) {}
 }

@@ -1,6 +1,8 @@
 package com.inops.query.controller;
 
 import com.inops.query.model.DocumentResponse;
+import com.inops.query.record.EmployeeLeaveBalance;
+import com.inops.query.record.LeavePolicyRecord;
 import com.inops.query.reactive.ClassMongoService;
 import com.inops.query.reactive.ReactiveMongoService;
 import com.inops.query.record.Employee;
@@ -55,8 +57,9 @@ public class MongoGraphQLController {
     }
 
     @QueryMapping
-    public Flux<Employee> fetchAllEmployees(@Argument("collection") String collection) {
-        return classMongoService.findAll(collection,Employee.class)
+    public Flux<Employee> fetchAllEmployees(@Argument("collection") String collection, @Argument("tenantCode") String tenantCode) {
+        Query query = new Query(Criteria.where("tenantCode").is(tenantCode));
+        return classMongoService.findWithFilters(collection, query, Employee.class)
                 .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
                 .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
@@ -64,16 +67,25 @@ public class MongoGraphQLController {
     }
 
     @QueryMapping
-    public Mono<Employee> getEmployeeById(@Argument("id") String id, @Argument("collection") String collection) {
-        return classMongoService.findById(collection, id, Employee.class).doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+    public Mono<Employee> getEmployeeByEmployeeID(@Argument("collection") String collection, @Argument("employeeID") String employeeID, @Argument("tenantCode") String tenantCode) {
+        Query query = new Query(Criteria.where("employeeID").is(employeeID));
+        if(tenantCode != null && !tenantCode.trim().isEmpty()) {
+            query.addCriteria(Criteria.where("tenantCode").is(tenantCode));
+        }
+        return classMongoService.findWithFilters(collection, query, Employee.class).next()
+                .flatMap(employee -> Mono.justOrEmpty(employee))
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
                 .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
                 .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found!!!")));
     }
 
     @QueryMapping
-    public Flux<Employee> getAllEmployeeByIds(@Argument("id") List<String> id, @Argument("collection") String collection){
-        Query query = new Query(Criteria.where("_id").in(id));
+    public Flux<Employee> getAllEmployeeByEmployeeIDs(@Argument("collection") String collection, @Argument("employeeID") List<String> employeeID, @Argument("tenantCode") String tenantCode){
+        Query query = new Query(Criteria.where("employeeID").in(employeeID));
+        if(tenantCode != null && !tenantCode.trim().isEmpty()) {
+            query.addCriteria(Criteria.where("tenantCode").is(tenantCode));
+        }
         return classMongoService.findWithFilters(collection, query, Employee.class)
                 .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
                 .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
@@ -138,13 +150,15 @@ public class MongoGraphQLController {
     }
 
     @QueryMapping
-    public Flux<FileDetails> fetchAllFileDetails(@Argument("collection") String collection){
-        return classMongoService.findAll(collection, FileDetails.class)
+    public Flux<FileDetails> fetchAllFileDetails(@Argument("collection") String collection, @Argument("tenantCode") String tenantCode){
+        Query query = new Query(Criteria.where("tenantCode").is(tenantCode));
+        return classMongoService.findWithFilters(collection, query, FileDetails.class)
                 .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
                 .doOnError(error -> log.error("Error retrieving document: {}", collection))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
                 .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
     }
+
 
     @QueryMapping
     public Flux<FileDetails> getAllFileDetailsByIds(@Argument("id") List<String> id, @Argument("collection") String collection){
@@ -166,8 +180,9 @@ public class MongoGraphQLController {
     }
 
     @QueryMapping
-    public Flux<Organization> fetchAllOrganization(@Argument("collection") String collection){
-        return classMongoService.findAll(collection, Organization.class)
+    public Flux<Organization> fetchAllOrganization(@Argument("collection") String collection, @Argument("tenantCode") String tenantCode){
+        Query query = new Query(Criteria.where("tenantCode").is(tenantCode));
+        return classMongoService.findWithFilters(collection, query, Organization.class)
                 .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
                 .doOnError(error -> log.error("Error retrieving document: {}", collection))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
@@ -175,8 +190,11 @@ public class MongoGraphQLController {
     }
 
     @QueryMapping
-    public Flux<Organization> getAllOrganizationByIds(@Argument("id") List<String> id, @Argument("collection") String collection){
-        Query query = new Query(Criteria.where("_id").in(id));
+    public Flux<Organization> getAllOrganizationByCodes(@Argument("organizationCode") List<String> organizationCode, @Argument("tenantCode") String tenantCode, @Argument("collection") String collection){
+        Query query = new Query(Criteria.where("organizationCode").in(organizationCode));
+        if(tenantCode != null && !tenantCode.trim().isEmpty()) {
+            query.addCriteria(Criteria.where("tenantCode").is(tenantCode));
+        }
         return classMongoService.findWithFilters(collection, query, Organization.class)
                 .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
                 .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
@@ -185,8 +203,69 @@ public class MongoGraphQLController {
     }
 
     @QueryMapping
-    public Mono<Organization>   getOrganizationsById(@Argument("id") String id, @Argument("collection") String collection){
-        return classMongoService.findById(collection, id, Organization.class)
+    public Mono<Organization> getOrganizationByCode(@Argument("organizationCode") String organizationCode, @Argument("tenantCode") String tenantCode, @Argument("collection") String collection){
+        Query query = new Query(Criteria.where("organizationCode").is(organizationCode));
+        if(tenantCode != null && !tenantCode.trim().isEmpty()) {
+            query.addCriteria(Criteria.where("tenantCode").is(tenantCode));
+        }
+        return classMongoService.findWithFilters(collection, query, Organization.class).next()
+                .flatMap(organization -> Mono.justOrEmpty(organization))
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+
+    @QueryMapping
+    public Flux<LeavePolicyRecord> fetchAllLeavePolicy(@Argument("collection") String collection){
+        return classMongoService.findAll(collection, LeavePolicyRecord.class)
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", collection))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+
+    @QueryMapping
+    public Flux<LeavePolicyRecord> getAllLeavePolicyByIds(@Argument("id") List<String> id, @Argument("collection") String collection){
+        Query query = new Query(Criteria.where("_id").in(id));
+        return classMongoService.findWithFilters(collection, query, LeavePolicyRecord.class)
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+
+    @QueryMapping
+    public Mono<LeavePolicyRecord> getLeavePolicyById(@Argument("id") String id, @Argument("collection") String collection){
+        return classMongoService.findById(collection, id, LeavePolicyRecord.class)
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+
+    @QueryMapping
+    public Flux<EmployeeLeaveBalance> fetchAllLeaveBalance(@Argument("collection") String collection){
+        return classMongoService.findAll(collection, EmployeeLeaveBalance.class)
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", collection))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+
+    @QueryMapping
+    public Flux<EmployeeLeaveBalance> getAllLeaveBalanceByIds(@Argument("id") List<String> id, @Argument("collection") String collection){
+        Query query = new Query(Criteria.where("_id").in(id));
+        return classMongoService.findWithFilters(collection, query, EmployeeLeaveBalance.class)
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+
+    @QueryMapping
+    public Mono<EmployeeLeaveBalance> getLeaveBalanceById(@Argument("id") String id, @Argument("collection") String collection){
+        return classMongoService.findById(collection, id, EmployeeLeaveBalance.class)
                 .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
                 .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))

@@ -6,6 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "files")
 public record FileDetails(
 		String _id,
+		String tenantCode,
 		String fileName,
 		String filePath,
 		String fileSize,

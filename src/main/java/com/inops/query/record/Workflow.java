@@ -5,7 +5,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 
 public record Workflow(
-		ObjectId _id,
+		String _id,
 		String name,
 		String initialState,
 		List<String> states,

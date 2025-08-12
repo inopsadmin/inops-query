@@ -61,6 +61,10 @@ public class ReactiveMongoMusterService {
         return reactiveMusterMongoTemplate.find(query, Document.class, collection);
     }
 
+    public Mono<Long> findCountWithFilters(String collectionName, Query query) {
+        return reactiveMusterMongoTemplate.count(query, Document.class, collectionName);
+    }
+
     public Flux<Document> findAllById(String collectionName, String id) {
         Aggregation matchAggregation = Aggregation.newAggregation(
                 Aggregation.match(Criteria.where("operationType").is("insert")

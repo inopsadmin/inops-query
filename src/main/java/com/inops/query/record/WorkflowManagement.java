@@ -5,7 +5,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 
 public record WorkflowManagement(
-		ObjectId _id,
+		String _id,
 		String tenantCode,
 		String userId,
 		String operation,

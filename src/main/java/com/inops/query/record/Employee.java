@@ -4,6 +4,7 @@ package com.inops.query.record;
 import java.util.List;
 
 public record Employee(
+        String _id,
         String organizationCode,
         String contractorCode,
         String tenantCode,
@@ -65,7 +66,14 @@ public record Employee(
         AuditTrail auditTrail,
         boolean onNoticePeriod,
         String manager,
-        String superviser
+        String superviser,
+        String aadharNumber,
+        String UANNumber,
+        String ESINumber,
+        String currentWorkOrderNumber,
+        Integer quotaUtilizationCountForSchool,
+        String dateOfLeaving,
+        String PFNumber
 ) {
     public record WorkSkill(String workSkillCode, String workSkillTitle) {
     }

@@ -4,7 +4,7 @@ import java.util.List;
 import org.bson.types.ObjectId;
 
 public record Organization(
-        ObjectId _id,
+        String _id,
         String organizationName,
         String organizationCode,
         String addressLine1,

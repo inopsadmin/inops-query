@@ -40,6 +40,10 @@ type Query {
   getAllLeaveBalanceByIds(id: [ID!]!, collection: String!): [EmployeeLeaveBalance]
   getLeaveBalanceById(id: ID!, collection: String!): EmployeeLeaveBalance
 
+  fetchShifts(criteriaRequests: [CriteriaRequest]!, collection: String!): [ShiftGroupConfig]
+  fetchContractors(criteriaRequests: [CriteriaRequest]!, collection: String!): [Contractor]
+  fetchCompanyEmployee(criteriaRequests: [CriteriaRequest]!, collection: String!): [CompanyEmployee]
+
   searchEmployees(collection: String!, searchByCode: String, searchByName: String): [Employee]
   }
 
@@ -48,8 +52,14 @@ type DocumentResponse {
   data: JSON
 }
 
+input CriteriaRequest {
+  field: String!
+  operator: String!
+  value: JSON!
+}
+
 type Employee {
-  _id:ID
+  _id: String
   organizationCode: String
   contractorCode: String
   tenantCode: String
@@ -112,6 +122,13 @@ type Employee {
   onNoticePeriod: Boolean
   manager: String
   superviser: String
+  aadharNumber: String
+  UANNumber: String
+  ESINumber: String
+  currentWorkOrderNumber: String
+  quotaUtilizationCountForSchool: Int
+  dateOfLeaving: String
+  PFNumber: String
 }
 
 # Nested Types
@@ -170,7 +187,7 @@ type Deployment {
   designation: Designation
   location: Location
   skillLevel: SkillLevel
-  contractor: Contractor
+  contractor: EmpContractor
   effectiveFrom: String
   remark: String
 }
@@ -225,7 +242,7 @@ type SkillLevel {
   skilledLevelDescription: String
 }
 
-type Contractor {
+type EmpContractor {
   contractorCode: String
   contractorName: String
 }
@@ -451,7 +468,7 @@ type AuditTrail {
 }
 
 type Workflow {
-  _id:  ID
+  _id:  String
   name:  String
   initialState:  String
   states: [String]
@@ -467,7 +484,7 @@ type Transition{
 }
 
 type WorkflowManagement{
-  _id:  ID
+  _id:  String
   tenantCode:  String
   userId:  String
   operation:  String
@@ -776,4 +793,124 @@ type LeaveBalance {
   carryForward: Float
   previousCarryForward: Float
   balance: Float
+}
+
+type ShiftGroupConfig {
+  _id: String!
+  organizationCode: String!
+  tenantCode: String!
+  shiftGroupCode: String
+  shiftGroupName: String
+  subsidiary: Subsidiary
+  location: Location
+  employeeCategory: [String]
+  shift: [Shift]
+}
+
+type Shift {
+  shiftCode: String
+  shiftName: String
+  shiftStart: String
+  shiftEnd: String
+  firstHalfStart: String
+  firstHalfEnd: String
+  secondHalfStart: String
+  secondHalfEnd: String
+  lunchStart: String
+  lunchEnd: String
+  duration: Int
+  crossDay: Boolean
+  flexible: Boolean
+  flexiFullDayDuration: Int
+  flexiHalfDayDuration: Int
+  inAheadMargin: Int
+  inAboveMargin: Int
+  outAheadMargin: Int
+  outAboveMargin: Int
+  lateInAllowedTime: Int
+  earlyOutAllowedTime: Int
+  graceIn: Int
+  graceOut: Int
+  earlyOutTime: Int
+  minimumDurationForFullDay: Int
+  minimumDurationForHalfDay: Int
+  minimumExtraMinutesForExtraHours: Int
+}
+
+type Contractor {
+  _id: String!
+  contractorCode: String
+  contractorName: String
+  organizationCode: String!
+  tenantCode: String!
+
+  ownerName: String
+  ownerContactNo: String
+  ownerEmailId: String
+  fatherName: String
+  contactPersonName: String
+  contactPersonContactNo: String
+  contactPersonEmailId: String
+  birthDate: String
+  workLocation: String
+  aadharNumber: String
+  contractorImage: String
+  serviceSince: String
+  typeOfCompany: String
+  penaltiesPolicies: Boolean
+  basicInformation: Boolean
+  companyDetails: Boolean
+  licensesPermits: Boolean
+  financialDetails: Boolean
+  documentsCompliance: Boolean
+  workOrdersCompleted: Boolean
+  addressInformation: Boolean
+  panNumber: String
+
+  workOrders: [ContractorWorkOrder]
+}
+
+type ContractorWorkOrder {
+  workOrderNumber: String
+  workOrderDate: String
+  proposalReferenceNumber: String
+  NumberOfEmployee: Int
+  contractPeriodFrom: String
+  contractPeriodTo: String
+  workOrderDocumentFilePath: String
+  annexureFilePath: String
+  serviceChargeAmount: Float
+  workOrderType: String
+  workOrderLineItems: String
+  serviceLineItems: String
+  serviceCode: String
+  wcChargesPerEmployee: Float
+  assetChargesPerDay: [Float]
+  employeeWages: EmployeeWages
+}
+
+type EmployeeWages {
+  wageType: String
+  wageAmount: Float
+}
+
+type CompanyEmployee {
+  _id: String
+  employeeID: String
+  firstName: String
+  middleName: String
+  lastName: String
+  gender: String
+  birthDate: String
+  photo: String
+  nationality: String
+  joiningDate: String
+  emailID: String
+  aadharNumber: String
+  manager: String
+  managerName: String
+  status: String
+  settingsRemarks: Boolean
+  organizationCode: String
+  tenantCode: String
 }

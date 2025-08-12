@@ -1,15 +1,11 @@
 package com.inops.query.controller;
 
+import com.inops.query.config.Util;
+import com.inops.query.model.CriteriaRequest;
 import com.inops.query.model.DocumentResponse;
-import com.inops.query.record.EmployeeLeaveBalance;
-import com.inops.query.record.LeavePolicyRecord;
+import com.inops.query.record.*;
 import com.inops.query.reactive.ClassMongoService;
 import com.inops.query.reactive.ReactiveMongoService;
-import com.inops.query.record.Employee;
-import com.inops.query.record.FileDetails;
-import com.inops.query.record.Organization;
-import com.inops.query.record.Workflow;
-import com.inops.query.record.WorkflowManagement;
 
 
 import lombok.RequiredArgsConstructor;
@@ -270,5 +266,35 @@ public class MongoGraphQLController {
                 .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
                 .switchIfEmpty(Mono.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+
+    @QueryMapping
+    public Flux<ShiftConfig> fetchShifts(@Argument("criteriaRequests") List<CriteriaRequest> criteriaRequests, @Argument("collection") String collection) {
+        Query query = Util.getQuery(criteriaRequests);
+        return classMongoService.findWithFilters(collection, query, ShiftConfig.class)
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+
+    @QueryMapping
+    public Flux<Contractor> fetchContractors(@Argument("criteriaRequests") List<CriteriaRequest> criteriaRequests,  @Argument("collection") String collection) {
+        Query query = Util.getQuery(criteriaRequests);
+        return classMongoService.findWithFilters(collection, query, Contractor.class)
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+
+    @QueryMapping
+    public Flux<CompanyEmployee> fetchCompanyEmployee(@Argument("criteriaRequests") List<CriteriaRequest> criteriaRequests,  @Argument("collection") String collection) {
+        Query query = Util.getQuery(criteriaRequests);
+        return classMongoService.findWithFilters(collection, query, CompanyEmployee.class)
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
     }
 }

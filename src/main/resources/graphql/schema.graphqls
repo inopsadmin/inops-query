@@ -59,75 +59,16 @@ input CriteriaRequest {
 }
 
 type Employee {
-  _id: String
+  _id:  String
   organizationCode: String
   contractorCode: String
   tenantCode: String
   employeeID: String
   firstName: String
-  middleName: String
-  lastName: String
-  fatherHusbandName: String
-  gender: String
-  birthDate: String
-  bloodGroup: String
-  nationality: String
-  maritalStatus: String
-  marriageDate: String
-  referenceBy: String
-  dateOfJoining: String
-  contractFrom: String
-  contractTo: String
-  contractPeriod: Int
-  workSkill: WorkSkill
-  paymentMode: String
-  busDetail: BusDetail
-  natureOfWork: NatureOfWork
-  rejoin: Rejoin
-  backgroundVerificationRemark: String
-  medicalVerificationRemark: String
-  emailID: EmailID
-  contactNumber: ContactNumber
-  covidVaccine: CovidVaccine
   deployment: Deployment
-  weeklyOff: [Int]
-  cards: [Card]
-  documents: [Document]
-  passport: Passport
-  workPermit: WorkPermit
-  labourCard: LabourCard
-  bankDetails: BankDetails
-  insuranceNumber: String
-  mediclaimPolicyNumber: String
-  WCPolicyNumber: String
-  accidentPolicyNumber: String
-  address: Address
-  familyMember: [FamilyMember]
-  highestEducation: HighestEducation
-  experience: Experience
-  trainings: [Training]
-  uploadedDocuments: [UploadedDocument]
-  assetAllocated: [AssetAllocated]
-  penalty: [Penalty]
-  workOrder: [WorkOrder]
-  pfNominee: [Nominee]
-  gratuityNominee: [Nominee]
-  medicalCheckup: [MedicalCheckup]
-  disciplinaryAction: [DisciplinaryAction]
-  policeVerification: [PoliceVerification]
-  accidentRegister: [AccidentRegister]
-  status: Status
-  remark: String
-  auditTrail: AuditTrail
-  onNoticePeriod: Boolean
-  manager: String
-  superviser: String
   aadharNumber: String
   UANNumber: String
   ESINumber: String
-  currentWorkOrderNumber: String
-  quotaUtilizationCountForSchool: Int
-  dateOfLeaving: String
   PFNumber: String
 }
 

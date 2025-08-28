@@ -94,7 +94,7 @@ public class Util {
             if (fieldCriteria.size() > 1) {
                 List<Criteria> andCriterias = new ArrayList<>();
                 for (CriteriaRequest cr : fieldCriteria) {
-                    Object value = Util.parseValue(cr.getValue());
+                    Object value = cr.getValue();
                     String op = cr.getOperator().toLowerCase();
 
                     switch (op) {
@@ -114,7 +114,7 @@ public class Util {
                 // Single condition
                 CriteriaRequest criteria = fieldCriteria.get(0);
                 String operator = criteria.getOperator().toLowerCase();
-                Object value = Util.parseValue(criteria.getValue());
+                Object value = criteria.getValue();
 
                 switch (operator) {
                     case "eq":

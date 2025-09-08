@@ -31,8 +31,8 @@ public record Contractor(
 	    Boolean workOrdersCompleted,
 	    Boolean addressInformation,
 	    String panNumber,
-
-	    List<ContractorWorkOrder> workOrders
+	    List<ContractorWorkOrder> workOrders,
+		Boolean isDeleted
 	) {
     public record ContractorWorkOrder(
         String workOrderNumber,
@@ -49,7 +49,7 @@ public record Contractor(
         String serviceLineItems,
         String serviceCode,
         double wcChargesPerEmployee,
-        List<Double> assetChargesPerDay,
+        List<AssetChargesPerDay> assetChargesPerDay,
         EmployeeWages employeeWages
     ) {}
 
@@ -57,4 +57,10 @@ public record Contractor(
         String wageType,
         double wageAmount
     ) {}
+
+	public record AssetChargesPerDay(
+			String assetCode,
+			String assetName,
+			Integer assetCharges
+	) {}
 }

@@ -14,7 +14,9 @@ public record Employee(
         String aadharNumber,
         String UANNumber,
         String ESINumber,
-        String PFNumber
+        String PFNumber,
+        Boolean isDeleted
+
 ) {
     public record WorkSkill(String workSkillCode, String workSkillTitle) {
     }
@@ -261,7 +263,8 @@ public record Employee(
     public record WorkOrder(
             String workOrderNumber,
             String effectiveFrom,
-            String effectiveTo
+            String effectiveTo,
+            boolean isActive
     ) {
     }
 

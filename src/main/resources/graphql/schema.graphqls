@@ -44,7 +44,7 @@ type Query {
   fetchContractors(criteriaRequests: [CriteriaRequest]!, collection: String!): [Contractor]
   fetchCompanyEmployee(criteriaRequests: [CriteriaRequest]!, collection: String!): [CompanyEmployee]
 
-  searchEmployees(collection: String!, searchByCode: String, searchByName: String): [Employee]
+  fetchEmployees(criteriaRequests: [CriteriaRequest]!, collection: String!): [Employee]
   }
 
 type DocumentResponse {
@@ -70,6 +70,7 @@ type Employee {
   UANNumber: String
   ESINumber: String
   PFNumber: String
+  isDeleted: Boolean
 }
 
 # Nested Types
@@ -354,6 +355,7 @@ type WorkOrder {
   workOrderNumber: String
   effectiveFrom: String
   effectiveTo: String
+  isActive: Boolean
 }
 
 type Nominee {
@@ -807,7 +809,6 @@ type Contractor {
   workOrdersCompleted: Boolean
   addressInformation: Boolean
   panNumber: String
-
   workOrders: [ContractorWorkOrder]
 }
 
@@ -826,13 +827,20 @@ type ContractorWorkOrder {
   serviceLineItems: String
   serviceCode: String
   wcChargesPerEmployee: Float
-  assetChargesPerDay: [Float]
+  assetChargesPerDay: [AssetChargesPerDay]
   employeeWages: EmployeeWages
+  isDeleted: Boolean
 }
 
 type EmployeeWages {
   wageType: String
   wageAmount: Float
+}
+
+type AssetChargesPerDay {
+  assetCode: String
+  assetName: String
+  assetCharges: Int
 }
 
 type CompanyEmployee {
@@ -854,4 +862,5 @@ type CompanyEmployee {
   settingsRemarks: Boolean
   organizationCode: String
   tenantCode: String
+  isDeleted: Boolean
 }

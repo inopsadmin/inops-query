@@ -18,5 +18,6 @@ public record CompanyEmployee(
 	    String status,
 	    Boolean settingsRemarks,
 	    String organizationCode,
-	    String tenantCode
+	    String tenantCode,
+		Boolean isDeleted
 	) {}

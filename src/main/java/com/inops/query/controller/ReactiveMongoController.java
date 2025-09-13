@@ -11,11 +11,21 @@ import org.bson.Document;
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 import reactor.util.retry.Retry;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.util.List;
 import java.util.Map;
@@ -97,9 +107,17 @@ public class ReactiveMongoController {
     @PostMapping(value = "/{collection}/search")
     public Flux<Document> fetchWithFilters(
             @PathVariable String collection,
-            @RequestBody List<CriteriaRequest> criteriaRequests) {
+            @RequestBody List<CriteriaRequest> criteriaRequests, @RequestParam(required = false) Long offset,
+            @RequestParam(required = false) Long limit) {
 
         Query query = Util.getQuery(criteriaRequests);
+        if (offset != null) {
+            query.skip(offset);
+        }
+        if (limit != null) {
+            query.limit(limit.intValue());
+        }
+        log.info("Executing query: {}, skip: {}, limit: {}", query, query.getSkip(), query.getLimit());
 
         return reactiveMongoService.findWithFilters(collection, query)
                 .doOnSubscribe(subscription -> log.info("Query started for collection: {}", collection))
@@ -163,4 +181,22 @@ public class ReactiveMongoController {
                 }).doOnError(error -> log.error("Error retrieving count of document:{}", error.getLocalizedMessage()))
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2))).defaultIfEmpty(0L);
     }
+
+    @GetMapping("/document")
+    public ResponseEntity<byte[]> fetchDocument(@RequestParam("path") String path) throws IOException {
+       Path filePath = Paths.get(path).toAbsolutePath().normalize();
+
+        if (!Files.exists(filePath) || !Files.isRegularFile(filePath)) {
+            throw new FileNotFoundException("File not found: " + filePath);
+        }
+
+        byte[] data = Files.readAllBytes(filePath);
+        String mimeType = Files.probeContentType(filePath);
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; filename=\"" + filePath.getFileName() + "\"")
+                .contentType(MediaType.parseMediaType(mimeType != null ? mimeType : MediaType.APPLICATION_OCTET_STREAM_VALUE))
+                .body(data);
+    }
+
 }

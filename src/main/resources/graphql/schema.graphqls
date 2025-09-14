@@ -787,6 +787,7 @@ type Contractor {
   organizationCode: String!
   tenantCode: String!
 
+  isDeleted: Boolean
   ownerName: String
   ownerContactNo: String
   ownerEmailId: String

@@ -45,6 +45,13 @@ type Query {
   fetchCompanyEmployee(criteriaRequests: [CriteriaRequest]!, collection: String!): [CompanyEmployee]
 
   fetchEmployees(criteriaRequests: [CriteriaRequest]!, collection: String!): [Employee]
+
+  fetchLeavePolicy(criteriaRequests: [CriteriaRequest]!, collection: String!): [LeavePolicyRecord]
+  fetchLeaveBalance(criteriaRequests: [CriteriaRequest]!, collection: String!): [EmployeeLeaveBalance]
+  fetchWorkflows(criteriaRequests: [CriteriaRequest]!, collection: String!): [Workflow]
+  fetchFileDetails(criteriaRequests: [CriteriaRequest]!, collection: String!): [FileDetails]
+  fetchOrganization(criteriaRequests: [CriteriaRequest]!, collection: String!): [Organization]
+
   }
 
 type DocumentResponse {

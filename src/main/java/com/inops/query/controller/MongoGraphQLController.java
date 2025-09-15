@@ -155,7 +155,6 @@ public class MongoGraphQLController {
                 .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
     }
 
-
     @QueryMapping
     public Flux<FileDetails> getAllFileDetailsByIds(@Argument("id") List<String> id, @Argument("collection") String collection){
         Query query = new Query(Criteria.where("_id").in(id));
@@ -307,4 +306,52 @@ public class MongoGraphQLController {
                 .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
                 .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
     }
+    @QueryMapping
+    public Flux<LeavePolicyRecord> fetchLeavePolicy(@Argument("collection") String collection, @Argument("criteriaRequests") List<CriteriaRequest> criteriaRequests){
+        Query query = Util.getQuery(criteriaRequests);
+        return classMongoService.findWithFilters(collection, query, LeavePolicyRecord.class)
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+    @QueryMapping
+    public Flux<EmployeeLeaveBalance> fetchLeaveBalance(@Argument("collection") String collection, @Argument("criteriaRequests") List<CriteriaRequest> criteriaRequests){
+        Query query = Util.getQuery(criteriaRequests);
+        return classMongoService.findWithFilters(collection, query, EmployeeLeaveBalance.class)
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+
+    @QueryMapping
+    public Flux<Workflow> fetchWorkflows(@Argument("collection") String collection, @Argument("criteriaRequests") List<CriteriaRequest> criteriaRequests){
+        Query query = Util.getQuery(criteriaRequests);
+        return classMongoService.findWithFilters(collection, query, Workflow.class)
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+    @QueryMapping
+    public Flux<FileDetails> fetchFileDetails(@Argument("collection") String collection, @Argument("criteriaRequests") List<CriteriaRequest> criteriaRequests){
+        Query query = Util.getQuery(criteriaRequests);
+        return classMongoService.findWithFilters(collection, query, FileDetails.class)
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+    @QueryMapping
+    public Flux<Organization> fetchOrganization(@Argument("collection") String collection, @Argument("criteriaRequests") List<CriteriaRequest> criteriaRequests){
+        Query query = Util.getQuery(criteriaRequests);
+        return classMongoService.findWithFilters(collection, query, Organization.class)
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
+
+
 }

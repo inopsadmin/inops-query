@@ -32,7 +32,9 @@ public record Contractor(
 	    Boolean addressInformation,
 	    String panNumber,
 	    List<ContractorWorkOrder> workOrders,
-		Boolean isDeleted
+		Boolean isDeleted,
+		String createdOn,
+		String createdBy
 	) {
     public record ContractorWorkOrder(
         String workOrderNumber,

@@ -78,6 +78,8 @@ type Employee {
   ESINumber: String
   PFNumber: String
   isDeleted: Boolean
+  createdOn: String
+  createdBy: String
 }
 
 # Nested Types
@@ -793,7 +795,8 @@ type Contractor {
   contractorName: String
   organizationCode: String!
   tenantCode: String!
-
+  createdOn: String
+  createdBy: String
   isDeleted: Boolean
   ownerName: String
   ownerContactNo: String
@@ -871,4 +874,6 @@ type CompanyEmployee {
   organizationCode: String
   tenantCode: String
   isDeleted: Boolean
+  createdOn: String
+  createdBy: String
 }

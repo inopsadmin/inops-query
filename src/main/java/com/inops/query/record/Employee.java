@@ -15,8 +15,9 @@ public record Employee(
         String UANNumber,
         String ESINumber,
         String PFNumber,
-        Boolean isDeleted
-
+        Boolean isDeleted,
+        String createdOn,
+        String createdBy
 ) {
     public record WorkSkill(String workSkillCode, String workSkillTitle) {
     }

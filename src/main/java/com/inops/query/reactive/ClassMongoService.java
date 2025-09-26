@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 public class ClassMongoService {
 
     private final ReactiveMongoTemplate reactiveMongoTemplate;
+    private final ReactiveMongoTemplate reactiveMusterMongoTemplate;
 
     public <T> Flux<T> findAll(String collection, Class<T> clazz) {
         return reactiveMongoTemplate.findAll(clazz, collection);
@@ -26,5 +27,8 @@ public class ClassMongoService {
 
     public <T> Flux<T> findWithFilters(String collectionName, Query query, Class<T> clazz) {
         return reactiveMongoTemplate.find(query, clazz, collectionName);
+    }
+    public <T> Flux<T> findWithMusterFilters(String collectionName, Query query, Class<T> clazz) {
+        return reactiveMusterMongoTemplate.find(query, clazz, collectionName);
     }
 }

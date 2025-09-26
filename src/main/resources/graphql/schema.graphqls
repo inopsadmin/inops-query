@@ -47,7 +47,7 @@ type Query {
   fetchWorkflows(criteriaRequests: [CriteriaRequest]!, collection: String!): [Workflow]
   fetchFileDetails(criteriaRequests: [CriteriaRequest]!, collection: String!): [FileDetails]
   fetchOrganization(criteriaRequests: [CriteriaRequest]!, collection: String!): [Organization]
-
+  fetchMuster(criteriaRequests: [CriteriaRequest]!, collection: String!): [Muster]
   }
 
 type DocumentResponse {
@@ -598,6 +598,57 @@ type OrgEmployeeCategory {
   employeeCategoryCode: String
   employeeCategoryName: String
   employeeCategoryDescription: String
+}
+
+type Muster {
+    _id: String
+    organizationCode: String
+    tenantCode: String
+    month: Int
+    year: Int
+    employeeID: String
+    attendanceDetails: [AttendanceDetail]
+}
+
+type AttendanceDetail {
+    date: String
+    shiftCode: String
+    attendanceID: String
+    leaveCode: String
+    hoursWorked: Int
+    lateIn: Int
+    earlyOut: Int
+    extraHours: Int
+    personalOut: Int
+    officialOut: Int
+    extraHoursPreShift: Int
+    extraHoursPostShift: Int
+    punchDetails: PunchDetails
+}
+
+type PunchDetails {
+    inPunches: [Punch]
+    outPunches: [Punch]
+    defaultPunches: [Punch]
+}
+
+type Punch {
+    _id: String
+    punchedTime: String
+    transactionTime: String
+    inOut: String
+    typeOfMovement: String
+    readerSerialNumber: String
+    uploadTime: String
+    attendanceDate: String
+    employeeID: String
+    organizationCode: String
+    tenantCode: String
+    processed: Boolean
+    state: String
+    isDeleted: Boolean
+    remarks: String
+    date: String
 }
 
 type LeavePolicyRecord {

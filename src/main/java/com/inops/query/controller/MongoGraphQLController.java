@@ -353,5 +353,13 @@ public class MongoGraphQLController {
                 .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
     }
 
-
+    @QueryMapping
+    public Flux<Muster> fetchMuster(@Argument("collection") String collection, @Argument("criteriaRequests") List<CriteriaRequest> criteriaRequests){
+        Query query = Util.getQuery(criteriaRequests);
+        return classMongoService.findWithMusterFilters(collection, query, Muster.class)
+                .doOnSubscribe(subscription -> log.info("Query execution started for collection: {}", collection))
+                .doOnError(error -> log.error("Error retrieving document: {}", error.getLocalizedMessage()))
+                .retryWhen(Retry.fixedDelay(3, Duration.ofSeconds(2)))
+                .switchIfEmpty(Flux.error(new ResourceNotFoundException("No matching documents found!!!")));
+    }
 }

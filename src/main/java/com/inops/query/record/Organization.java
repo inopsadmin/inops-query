@@ -28,7 +28,10 @@ public record Organization(
         List<OrgSection> sections,
         List<OrgEmployeeCategory> employeeCategories,
         List<OrgLocation> location,
-        List<OrgReasonCode> reasonCodes
+        List<OrgReasonCode> reasonCodes,
+        List<SkillLevel> skillLevels,
+        List<State> state,
+        List<Country> country
 ) {
 
     public record OrgSubsidiary(
@@ -120,5 +123,22 @@ public record Organization(
     public record OrgReasonCode(
             String reasonCode,
             String reasonName
+    ) {}
+
+    public record SkillLevel(
+            String skilledLevelTitle,
+            String skilledLevelDescription
+    ) {}
+
+    public record State(
+            String countryCode,
+            String countryName,
+            String stateCode,
+            String stateName
+    ) {}
+
+    public record Country(
+            String countryCode,
+            String countryName
     ) {}
 }

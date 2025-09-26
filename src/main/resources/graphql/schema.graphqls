@@ -28,10 +28,6 @@ type Query {
   getAllOrganizationByCodes(organizationCode: [ID!]!, tenantCode: String!, collection: String!): [Organization]
   getOrganizationByCode( organizationCode: ID!, tenantCode: String!, collection: String!): Organization
 
-  fetchAllMuster(collection: String!): [Muster]
-  getAllMusterByIds(id: [ID!]!, collection: String!): [Muster]
-  getMustersById(id: ID!, collection: String!): Muster
-
   fetchAllLeavePolicy(collection: String!): [LeavePolicyRecord]
   getAllLeavePolicyByIds(id: [ID!]!, collection: String!): [LeavePolicyRecord]
   getLeavePolicyById(id: ID!, collection: String!): LeavePolicyRecord
@@ -494,6 +490,21 @@ type Organization {
   location: [OrgLocation]
   employeeCategories: [OrgEmployeeCategory]
   reasonCodes: [OrgReasonCode]
+  skillLevels: [SkillLevel]
+  state: [State]
+  country: [Country]
+}
+
+type State {
+  countryCode: String
+  countryName: String
+  stateCode: String
+  stateName: String
+}
+
+type Country {
+  countryCode: String
+  countryName: String
 }
 
 type OrgReasonCode {
@@ -587,36 +598,6 @@ type OrgEmployeeCategory {
   employeeCategoryCode: String
   employeeCategoryName: String
   employeeCategoryDescription: String
-}
-
-type Muster {
-    id: ID
-    month: String
-    year: String
-    employeeId: String
-    attendanceDetails: [AttendanceDetail]
-}
-
-type AttendanceDetail {
-    date: String
-    shiftCode: String
-    attendanceID: String
-    hoursWorked: Int
-    lateIn: Int
-    earlyOut: Int
-    extraHoursPostShift: Int
-    extraHoursPreShift: Int
-    extraHours: Int
-    personalOut: Int
-    officialOut: Int
-    otHours: Int
-    punchDetails: PunchDetails
-}
-
-type PunchDetails {
-    inPunches: [String]
-    outPunches: [String]
-    defaultPunches: [String]
 }
 
 type LeavePolicyRecord {

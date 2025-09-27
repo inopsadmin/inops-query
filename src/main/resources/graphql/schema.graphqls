@@ -48,6 +48,7 @@ type Query {
   fetchFileDetails(criteriaRequests: [CriteriaRequest]!, collection: String!): [FileDetails]
   fetchOrganization(criteriaRequests: [CriteriaRequest]!, collection: String!): [Organization]
   fetchMuster(criteriaRequests: [CriteriaRequest]!, collection: String!): [Muster]
+  fetchWageSalaryHeads(criteriaRequests: [CriteriaRequest]!, collection: String!): [WageSalaryHeads]
   }
 
 type DocumentResponse {
@@ -908,4 +909,27 @@ type CompanyEmployee {
   isDeleted: Boolean
   createdOn: String
   createdBy: String
+}
+
+type WageSalaryHeads {
+  _id: String
+  organizationCode: String
+  tenantCode: String
+  name: String
+  code: String
+  description: String
+  salaryType: String
+  primarySalaryHead: PrimarySalaryHead
+  calculationType: CalculationType
+  printable: Boolean
+  salaryCalculationBasis: String
+}
+
+type PrimarySalaryHead {
+  name: String
+  code: String
+}
+
+type CalculationType {
+  type: String
 }

@@ -826,8 +826,8 @@ type Contractor {
   _id: String!
   contractorCode: String
   contractorName: String
-  organizationCode: String!
-  tenantCode: String!
+  organizationCode: String
+  tenantCode: String
   createdOn: String
   createdBy: String
   isDeleted: Boolean
@@ -835,24 +835,7 @@ type Contractor {
   ownerContactNo: String
   ownerEmailId: String
   fatherName: String
-  contactPersonName: String
-  contactPersonContactNo: String
-  contactPersonEmailId: String
-  birthDate: String
-  workLocation: String
   aadharNumber: String
-  contractorImage: String
-  serviceSince: String
-  typeOfCompany: String
-  penaltiesPolicies: Boolean
-  basicInformation: Boolean
-  companyDetails: Boolean
-  licensesPermits: Boolean
-  financialDetails: Boolean
-  documentsCompliance: Boolean
-  workOrdersCompleted: Boolean
-  addressInformation: Boolean
-  panNumber: String
   workOrders: [ContractorWorkOrder]
 }
 
@@ -863,17 +846,6 @@ type ContractorWorkOrder {
   NumberOfEmployee: Int
   contractPeriodFrom: String
   contractPeriodTo: String
-  workOrderDocumentFilePath: String
-  annexureFilePath: String
-  serviceChargeAmount: Float
-  workOrderType: String
-  workOrderLineItems: String
-  serviceLineItems: String
-  serviceCode: String
-  wcChargesPerEmployee: Float
-  assetChargesPerDay: [AssetChargesPerDay]
-  employeeWages: EmployeeWages
-  isDeleted: Boolean
 }
 
 type EmployeeWages {
